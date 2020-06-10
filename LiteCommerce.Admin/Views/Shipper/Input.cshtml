@@ -1,0 +1,46 @@
+﻿@model LiteCommerce.DomainModels.Shipper
+
+@{
+    ViewData["Title"] = "Shipper";
+    ViewData["HeaderTitle"] = "Add Shippers";
+}
+
+<div class="box box-primary">
+    <form action="~/Shipper/Input" method="POST" role="form">
+        <div class="box-header text-right">
+            <a href="~/Shipper">Back to List</a>
+        </div>
+        <input name="ShipperID" value="@Model.ShipperID" readonly hidden/>
+        <div class="box-body">
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label>Company Name: @Html.ValidationMessage("CompanyName", new { @style="color: #FF0000" }) </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <input type="text" name="CompanyName" value="@Model.CompanyName" class="form-control" placeholder="Enter company name">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label>Phone:</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <input type="text" name="Phone" value="@Model.Phone" class="form-control" placeholder="Enter phone">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fa fa-save"></i> Save
+            </button>
+            <a class="btn btn-sm btn-default" href="~/Shipper">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>

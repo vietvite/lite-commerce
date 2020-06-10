@@ -1,0 +1,131 @@
+﻿@model LiteCommerce.Models.EmployeePaginationResult
+
+@{
+    ViewData["Title"] = "Employee";
+    ViewData["HeaderTitle"] = "Manage Employees";
+    int i = (Model.Page - 1) * Model.PageSize;
+}
+
+@functions{
+    public string maybeSearchQuery(string SearchValue) {
+        return SearchValue != "" 
+            ? string.Format("&searchvalue={0}", SearchValue)
+            : "";
+    }
+    public string justPageQuery(int page) {
+        return "page=" + page;
+    }
+    public string singularOrPluralWord(int count, string singularWord, string pluralWord) {
+        return count > 1
+            ? pluralWord
+            : singularWord;
+    }
+}
+
+<div class="box box-primary">
+    <div class="box-body">
+        <form action="~/Employee" method="GET" >
+            <div class="input-group input-group-sm">
+                <input name="searchValue" type="text" class="form-control" placeholder="Input search value..." value="@Model.SearchValue">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary btn-flat">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+<form action="~/Employee/Delete" method="POST">
+    <div class="container-fluid row" style="margin-bottom:10px;">
+        <div class="col-sm-8">
+            There are <b>@Model.RowCount</b> @singularOrPluralWord(Model.RowCount, "employee", "employees"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
+        </div>
+        <div class="col-md-4 text-right">
+            <div class="btn-group">
+                <a href="~/Employee/Input" class="btn btn-sm btn-primary">Add Employee</a>
+                <button type="submit" class="btn btn-sm btn-danger">Delete Employees</button>
+            </div>
+        </div>
+    </div>
+    <div class="box box-success">
+        <div class="box-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width:30px">
+                            <input type="checkbox" />
+                        </th>
+                        <th style="width:50px">#</th>
+                        <th style="width:180px">Fullname</th>
+                        <th style="width:90px">Hire day</th>
+                        <th style="width:auto">Basic info</th>
+                        <th style="width:auto">Address</th>
+                        <th style="width:100px">Note</th>
+                        <th style="width:50px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var employee in Model.Data)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="EmployeeIDs" value="@employee.EmployeeID" />
+                            </td>
+                            <td>@(++i)</td>
+                            <td>
+                                <span title="Fullname" style="color:#0094ff; font-weight:bold; display:block">
+                                    @employee.FirstName @employee.LastName
+                                </span>
+                                <span title="Title" style="color:#646464">
+                                    @employee.Title
+                                </span>
+                            </td>
+                            <td>
+                                <p>@string.Format("{0:dd/MM/yyyy}", employee.HireDate)</p>
+                            </td>
+                            <td>
+                                <span style="display:block" title="Email"><i class="fa fa-envelope"></i> @employee.Email</span>
+                                <span style="display:block" title="Phone"><i class="fa fa-phone"></i> @employee.HomePhone</span>
+                                <span style="display:block" title="Birthday"><i class="fa fa-birthday-cake"></i> @string.Format("{0:dd/MM/yyyy}", employee.BirthDate)</span>
+                            </td>
+                            <td>
+                                <span style="display:block" title="Address">@employee.Address</span>
+                                <span style="display:block" title="City">@employee.City</span>
+                                <span style="display:block" title="Country">@employee.Country</span>
+                            </td>
+                            
+                            <td><p style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;width:200px" title="@employee.Notes">@employee.Notes</p></td>
+                            <td class="text-right">
+                                <a class="btn btn-sm btn-default" href="~/Employee/Input/@employee.EmployeeID/">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer clearfix text-center">
+            <ul class="pagination pagination-sm no-margin pull-right">
+                @if(Model.Page > 1) {
+                    <li><a href="~/Employee?@maybeSearchQuery(@Model.SearchValue)">«</a></li>
+                }
+                @for (int p = 1; p <= Model.PageCount; p++)
+                {
+                    if (p == Model.Page)
+                    {
+                        <li class="active"><a href="">@p</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="~/Employee?@justPageQuery(@p)@maybeSearchQuery(@Model.SearchValue)">@p</a></li>
+                    }
+                }
+                @if(Model.Page < Model.PageCount) {
+                    <li><a href="~/Employee?@justPageQuery(@Model.PageCount)@maybeSearchQuery(@Model.SearchValue)">»</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Employee";
+    ViewData["HeaderTitle"] = ViewData["HeaderTitle"] ?? TempData["HeaderTitle"];
+}
+
+@functions {
+    public string usePhotoPathOrDefault(string photoPath)
+    {
+        return string.IsNullOrEmpty(photoPath)
+            ? "/uploads/user.png"
+            : "/uploads/" + photoPath;
+    }
+    public string MaybeId(int id)
+    {
+        return id != 0
+            ? ""+id
+            : "";
+    }
+}
+
+<div class="box box-primary">
+    <form enctype="multipart/form-data" action="~/Employee/Input/@MaybeId(@Model.EmployeeID)" method="POST" role="form">
+        <div class="box-header text-right">
+            <a href="~/Employee">Back to List</a>
+        </div>
+        <input type="text" name="EmployeeID" value="@Model.EmployeeID" readonly hidden>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label>Last name: @Html.ValidationMessage("LastName", new { @style="color: #FF0000" }) </label>
+                            <input type="text" name="LastName" value="@Model.LastName" class="form-control" placeholder="Last name">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>First name: @Html.ValidationMessage("FirstName", new { @style="color: #FF0000" }) </label>
+                            <input type="text" name="FirstName" value="@Model.FirstName" class="form-control" placeholder="First name">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label>Title: @Html.ValidationMessage("Title", new { @style="color: #FF0000" }) </label>
+                            <input type="text" name="Title" value="@Model.Title" class="form-control" placeholder="Enter title">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Email: @Html.ValidationMessage("Email", new { @style="color: #FF0000" }) </label>
+                            <input type="email" name="Email" value="@Model.Email" class="form-control" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label>Birthday: @Html.ValidationMessage("BirthDate", new { @style="color: #FF0000" })</label>
+                            <input type="date" name="BirthDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BirthDate)" class="form-control" placeholder="Birthday">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Hire day: @Html.ValidationMessage("HireDay", new { @style="color: #FF0000" })</label>
+                            <input type="date" name="HireDate" value="@string.Format("{0:yyyy-MM-dd}", @Model.HireDate)" class="form-control" placeholder="Hire day">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <img id="avatar" class="img-thumbnail" src="@usePhotoPathOrDefault(@Model.PhotoPath)" alt="user">
+                    <input id="PhotoPath_file" type="file" name="PhotoPath" value="@Model.PhotoPath" style="display: none;">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label>Country:</label>
+                    <select class="form-control" name="Country" value="@Model.Country">
+                        @foreach (var country in LiteCommerce.SelectListHelper.Countries())
+                        {
+                            if(Model.Country == country.Value) {
+                                <option value="@country.Value" selected>@country.Text</option>
+                            } else {
+                                <option value="@country.Value">@country.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label>City:</label>
+                    <input type="text" name="City" value="@Model.City" class="form-control" placeholder="Ex: New Orleans">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label>Address:</label>
+                    <input type="text" name="Address" value="@Model.Address" class="form-control" placeholder="Address">
+                </div>
+                <div class="col-sm-6">
+                    <label>Home Phone:</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <input type="number" name="HomePhone" value="@Model.HomePhone" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Notes:</label>
+                <textarea name="Notes" class="form-control" rows="10">@Model.Notes</textarea>
+            </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fa fa-save"></i> Save
+            </button>
+            <a class="btn btn-sm btn-default" href="~/Employee">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>

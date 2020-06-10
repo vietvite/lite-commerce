@@ -1,0 +1,151 @@
+﻿@model LiteCommerce.Models.ProductPaginationResult
+
+@{
+    ViewData["Title"] = "Product";
+    ViewData["HeaderTitle"] = "Manage Product";
+    int i = (Model.Page - 1) * Model.PageSize;
+}
+
+@functions{
+    public string maybeSearchQuery(string SearchValue) {
+        return SearchValue != "" 
+            ? string.Format("&searchvalue={0}", SearchValue)
+            : "";
+    }
+    public string justPageQuery(int page) {
+        return "page=" + page;
+    }
+    public string singularOrPluralWord(int count, string singularWord, string pluralWord) {
+        return count > 1
+            ? pluralWord
+            : singularWord;
+    }
+}
+
+<div class="box box-primary">
+    <div class="box-body">
+        <form action="~/Product" method="get">
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <select class="form-control" name="category">
+
+                        @* @Html.DropDownListFor(m => m.Category,
+                                                SelectListHelper.Categories(),
+                                                new { @class="form-control"}) *@
+                        
+                        @foreach (var category in LiteCommerce.SelectListHelper.Categories())
+                        {
+                            <option value="@category.Value">@category.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <select class="form-control" name="product">
+
+                        @* @Html.DropDownListFor(m => m.Supplier,
+                                                SelectListHelper.Suppliers(),
+                                                new { @class="form-control"}) *@
+                        
+                        @foreach (var product in LiteCommerce.SelectListHelper.Suppliers())
+                        {
+                            <option value="@product.Value">@product.Text</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        @* @Html.TextBox("SearchValue",
+                            new { @type="text", @class="form-control", @placehoder="Input search value..."}) *@
+                        <input name="searchValue" type="text" class="form-control" placeholder="Input search value...">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-primary btn-flat">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<form action="~/Product/Delete" method="POST">
+    <div class="container-fluid row" style="margin-bottom:10px;">
+        <div class="col-sm-8">
+            There are <b>@Model.RowCount</b> @singularOrPluralWord(Model.RowCount, "product", "products"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
+        </div>
+        <div class="col-md-4 text-right">
+            <div class="btn-group">
+                <a href="~/Product/Input" class="btn btn-sm btn-primary">Add Product</a>
+                <button type="button" class="btn btn-sm btn-danger">Delete Products</button>
+            </div>
+        </div>
+    </div>
+    <div class="box box-success">
+        <div class="box-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width:30px">
+                            <input type="checkbox" />
+                        </th>
+                        <th style="width:50px">#</th>
+                        <th style="width:auto">Product Name</th>
+                        <th style="width:200px">Supplier</th>
+                        <th style="width:200px">Category</th>
+                        <th style="width:80px">Quantity/Unit</th>
+                        <th style="width:100px">Unit price</th>
+                        <th style="width:auto">Description</th>
+                        <th style="width:200px">PhotoPath</th>
+                        <th style="width:80px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.Data)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="productIDs" value="@product.ProductID"/>
+                            </td>
+                            <td>@(++i)</td>
+                            <td><p>@product.ProductName</p></td>
+                            <td><p>@product.SupplierID</p></td>
+                            <td><p>@product.CategoryID</p></td>
+                            <td><p>@product.QuantityPerUnit</p></td>
+                            <td><p>@product.UnitPrice</p></td>
+                            <td><p>@product.Descriptions</p></td>
+                            <td><p>@product.PhotoPath</p></td>
+                            <td class="text-right">
+                                <a class="btn btn-sm btn-default" href="~/Product/Input/@product.ProductID">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer clearfix text-center">
+            <ul class="pagination pagination-sm no-margin pull-right">
+                @if(Model.Page > 1) {
+                    <li><a href="~/Product?@maybeSearchQuery(@Model.SearchValue)">«</a></li>
+                }
+                @for (int p = 1; p <= Model.PageCount; p++)
+                {
+                    if (p == Model.Page)
+                    {
+                        <li class="active"><a href="">@p</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="~/Product?@justPageQuery(@p)@maybeSearchQuery(@Model.SearchValue)">@p</a></li>
+                    }
+                }
+                @if(Model.Page < Model.PageCount) {
+                    <li><a href="~/Product?@justPageQuery(@Model.PageCount)@maybeSearchQuery(@Model.SearchValue)">»</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</form>
