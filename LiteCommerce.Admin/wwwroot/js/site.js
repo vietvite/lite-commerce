@@ -11,5 +11,8 @@ $(document).ready(function () {
         let ok = confirm("Không thể hoàn tác sau khi xóa. Bạn chắc chắn muốn xóa?")
         if(!ok) e.preventDefault()
     });
-
+    
+    $("#checkAll").click(function(){
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
 });
