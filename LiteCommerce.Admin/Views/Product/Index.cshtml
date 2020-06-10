@@ -70,7 +70,7 @@
         </form>
     </div>
 </div>
-<form action="~/Product/Delete" method="POST">
+<form id="delete-selected" action="~/Product/Delete" method="POST">
     <div class="container-fluid row" style="margin-bottom:10px;">
         <div class="col-sm-8">
             There are <b>@Model.RowCount</b> @singularOrPluralWord(Model.RowCount, "product", "products"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
@@ -78,7 +78,7 @@
         <div class="col-md-4 text-right">
             <div class="btn-group">
                 <a href="~/Product/Input" class="btn btn-sm btn-primary">Add Product</a>
-                <button type="button" class="btn btn-sm btn-danger">Delete Products</button>
+                <button type="submit" class="btn btn-sm btn-danger">Delete Products</button>
             </div>
         </div>
     </div>

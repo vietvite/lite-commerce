@@ -37,7 +37,7 @@
         </form>
     </div>
 </div>
-<form action="~/Suppliers/Delete" method="POST">
+<form id="delete-selected" action="~/Suppliers/Delete" method="POST">
     <div class="container-fluid row" style="margin-bottom:10px;">
         <div class="col-sm-8">
             There are <b>@Model.RowCount</b> @singularOrPluralWord(Model.RowCount, "supplier", "suppliers"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
