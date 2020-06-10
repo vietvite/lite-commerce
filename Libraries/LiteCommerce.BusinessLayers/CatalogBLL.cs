@@ -27,6 +27,7 @@ namespace LiteCommerce.BusinessLayers
             EmployeeDB = new DataLayers.SqlServer.EmployeeDAL(connectionString);
             CategoryDB = new DataLayers.SqlServer.CategoryDAL(connectionString);
             ProductDB = new DataLayers.SqlServer.ProductDAL(connectionString);
+            CountryDB = new DataLayers.SqlServer.CountryDAL(connectionString);
         }
         private static ISupplierDAL SupplierDB { get; set; }
         private static ICustomerDAL CustomerDB { get; set; }
@@ -34,6 +35,7 @@ namespace LiteCommerce.BusinessLayers
         private static IEmployeeDAL EmployeeDB { get; set; }
         private static ICategoryDAL CategoryDB { get; set; }
         private static IProductDAL ProductDB { get; set; }
+        private static ICountryDAL CountryDB { get; set; }
 
         #endregion
 
@@ -92,6 +94,16 @@ namespace LiteCommerce.BusinessLayers
             //     pageSize = 1;
             rowCount = CategoryDB.Count(searchValue);
             return ProductDB.List(page, pageSize, searchValue, category, supplier);
+        }
+
+        public static List<Country> ListOfCountry(int page, int pageSize, string searchValue, out int rowCount)
+        {
+            if (page < 1)
+                page = 1;
+            // if (pageSize < 0)
+            //     pageSize = 1;
+            rowCount = CountryDB.Count(searchValue);
+            return CountryDB.List(page, pageSize, searchValue);
         }
 
         public static Supplier GetSupplier(int supplierID)
@@ -198,9 +210,24 @@ namespace LiteCommerce.BusinessLayers
             return ProductDB.Delete(productIDs);
         }
 
+        public static Country GetCountry(string countryID)
+        {
+            return CountryDB.Get(countryID);
+        }
+        public static string AddCountry(Country country)
+        {
+            return CountryDB.Add(country);
+        }
+        public static bool UpdateCountry(Country country)
+        {
+            return CountryDB.Update(country);
+        }
+        public static int DeleteCountries(string[] countryIDs)
+        {
+            return CountryDB.Delete(countryIDs);
+        }
+
 
         #endregion
     }
-
-
 }

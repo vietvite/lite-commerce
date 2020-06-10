@@ -6,4 +6,10 @@ $(document).ready(function () {
     $("#avatar").click(function() {
         $("input[id='PhotoPath_file']").click();
     });
+    
+    $("form#delete-selected").submit(function(e) {
+        let ok = confirm("Không thể hoàn tác sau khi xóa. Bạn chắc chắn muốn xóa?")
+        if(!ok) e.preventDefault()
+    });
+
 });

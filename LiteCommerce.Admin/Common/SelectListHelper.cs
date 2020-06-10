@@ -13,10 +13,13 @@ namespace LiteCommerce
         /// <returns></returns>
         public static List<SelectListItem> Countries()
         {
+            int rowCount;
+            List<Country> lstCountries = CatalogBLL.ListOfCountry(1, -1, "", out rowCount);
             List<SelectListItem> list = new List<SelectListItem>();
-            list.Add(new SelectListItem() { Value = "USA", Text = "United State" });
-            list.Add(new SelectListItem() { Value = "UK", Text = "England" });
-            list.Add(new SelectListItem() { Value = "VN", Text = "Vietnam" });
+            foreach (var country in lstCountries)
+            {
+                list.Add(new SelectListItem() { Value = country.CountryID, Text = country.CountryName });
+            }
             return list;
         }
 
