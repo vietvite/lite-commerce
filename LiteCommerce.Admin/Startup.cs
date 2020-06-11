@@ -12,6 +12,9 @@ using LiteCommerce.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using LiteCommerce.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace LiteCommerce
 {
@@ -52,8 +55,11 @@ namespace LiteCommerce
                     opts.Cookie.Name = "UserCookie";
                     opts.LoginPath = "/Account/LogIn";
                     opts.LogoutPath = "/Account/SignOut";
+                    opts.AccessDeniedPath = "/Dashboard"; ;
                 });
+
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,6 +82,8 @@ namespace LiteCommerce
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            // app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

@@ -22,7 +22,9 @@ namespace LiteCommerce
                 var services = scope.ServiceProvider;
                 try
                 {
-                    CatalogBLL.Initialize();
+                    string connectionString = "Server=localhost;Database=LiteCommerce;User Id=sa;Password=asdASD123;MultipleActiveResultSets=true";
+                    CatalogBLL.Initialize(connectionString);
+                    UserAccountBLL.Initialize(connectionString);
                 }
                 catch (System.Exception exception)
                 {

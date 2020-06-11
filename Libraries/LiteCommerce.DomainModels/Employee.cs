@@ -17,5 +17,6 @@ namespace LiteCommerce.DomainModels
         public string Notes { get; set; }
         public string PhotoPath { get; set; }
         public string Password { get; set; }
+        public string Roles { get; set; }
     }
 }

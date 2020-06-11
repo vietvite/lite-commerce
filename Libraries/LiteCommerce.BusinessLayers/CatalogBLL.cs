@@ -19,7 +19,7 @@ namespace LiteCommerce.BusinessLayers
         /// Hàm này phải được gọi để khởi tạo chức năng tác nghiệp
         /// </summary>
         /// <param name="connectionString"></param>
-        public static void Initialize(string connectionString = "Server=localhost;Database=LiteCommerce;User Id=sa;Password=asdASD123;MultipleActiveResultSets=true")
+        public static void Initialize(string connectionString)
         {
             SupplierDB = new DataLayers.SqlServer.SupplierDAL(connectionString);
             CustomerDB = new DataLayers.SqlServer.CustomerDAL(connectionString);

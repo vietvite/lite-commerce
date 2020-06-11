@@ -19,80 +19,100 @@
     }
 }
 
-<div class="box box-primary">
-    <form enctype="multipart/form-data" action="~/Product/Input/@MaybeId(@Model.ProductID)" method="POST" role="form">
-        <div class="box-header text-right">
-            <a href="~/Product">Back to List</a>
-        </div>
-        <input name="ProductID" value="@Model.ProductID" readonly hidden/>
-        <div class="box-body">
-            <div class="row">
-                <div class="col-sm-9">
-                    <div class="form-group">
-                        <label>Product Name: @Html.ValidationMessage("ProductName", new { @style="color: #FF0000" }) </label>
-                        <input name="ProductName" value="@Model.ProductName" type="text" class="form-control" placeholder="Enter product Name">
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-6">
-                            <label>Supplier: @Html.ValidationMessage("SupplierID", new { @style="color: #FF0000" })</label>
-                            <select class="form-control" name="SupplierID">
-                                @foreach (var supplier in LiteCommerce.SelectListHelper.Suppliers())
-                                {
-                                    if(Model.SupplierID == Convert.ToInt32(supplier.Value)) {
-                                        <option value="@supplier.Value" selected>@supplier.Text</option>
-                                    } else {
-                                        <option value="@supplier.Value">@supplier.Text</option>
-                                    }
-                                }
-                            </select>
+    
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab_1" data-toggle="tab">Product</a></li>
+        <li><a href="#tab_2" data-toggle="tab">Product Attribute</a></li>
+        <li class="pull-right"><a href="~/Product">Back to list</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab_1">
+            <form enctype="multipart/form-data" action="~/Product/Input/@MaybeId(@Model.ProductID)" method="POST" role="form">
+                <input name="ProductID" value="@Model.ProductID" readonly hidden/>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="form-group">
+                            <label>Product Name: @Html.ValidationMessage("ProductName", new { @style="color: #FF0000" }) </label>
+                            <input name="ProductName" value="@Model.ProductName" type="text" class="form-control" placeholder="Enter product Name">
                         </div>
-                        <div class="col-sm-6">
-                            <label>Category: @Html.ValidationMessage("CategoryID", new { @style="color: #FF0000" })</label>
-                            <select class="form-control" name="CategoryID">
-                                @foreach (var category in LiteCommerce.SelectListHelper.Categories())
-                                {
-                                    if(Model.CategoryID == Convert.ToInt32(category.Value))
-                                        {
-                                        <option value="@category.Value" selected>@category.Text</option>
-                                    } else 
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label>Supplier: @Html.ValidationMessage("SupplierID", new { @style="color: #FF0000" })</label>
+                                <select class="form-control" name="SupplierID">
+                                    @foreach (var supplier in LiteCommerce.SelectListHelper.Suppliers())
                                     {
-                                        <option value="@category.Value">@category.Text</option>
+                                        if(Model.SupplierID == Convert.ToInt32(supplier.Value)) {
+                                            <option value="@supplier.Value" selected>@supplier.Text</option>
+                                        } else {
+                                            <option value="@supplier.Value">@supplier.Text</option>
+                                        }
                                     }
-                                }
-                            </select>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Category: @Html.ValidationMessage("CategoryID", new { @style="color: #FF0000" })</label>
+                                <select class="form-control" name="CategoryID">
+                                    @foreach (var category in LiteCommerce.SelectListHelper.Categories())
+                                    {
+                                        if(Model.CategoryID == Convert.ToInt32(category.Value))
+                                            {
+                                            <option value="@category.Value" selected>@category.Text</option>
+                                        } else 
+                                        {
+                                            <option value="@category.Value">@category.Text</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label>Quantity/Unit:</label>
+                                <input name="QuantityPerUnit" value="@Model.QuantityPerUnit" type="text" class="form-control" placeholder="Quantity/Unit">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Unit price:</label>
+                                <input name="UnitPrice" value="@Model.UnitPrice" type="number" class="form-control" placeholder="Unit price">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="Descriptions" class="form-control" rows="10" placeholder="Enter description">@Model.Descriptions</textarea>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-6">
-                            <label>Quantity/Unit:</label>
-                            <input name="QuantityPerUnit" value="@Model.QuantityPerUnit" type="text" class="form-control" placeholder="Quantity/Unit">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <img id="avatar" class="img-thumbnail" src="@usePhotoPathOrDefault(@Model.PhotoPath)" alt="user">
+                            <input id="PhotoPath_file" type="file" name="PhotoPath" value="@Model.PhotoPath" style="display: none;">
                         </div>
-                        <div class="col-sm-6">
-                            <label>Unit price:</label>
-                            <input name="UnitPrice" value="@Model.UnitPrice" type="number" class="form-control" placeholder="Unit price">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea name="Descriptions" class="form-control" rows="10" placeholder="Enter description">@Model.Descriptions</textarea>
                     </div>
                 </div>
-                <div class="col-sm-3">
-                    <div class="form-group">
-                        <img id="avatar" class="img-thumbnail" src="@usePhotoPathOrDefault(@Model.PhotoPath)" alt="user">
-                        <input id="PhotoPath_file" type="file" name="PhotoPath" value="@Model.PhotoPath" style="display: none;">
-                    </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        <i class="fa fa-save"></i> Save
+                    </button>
+                    <a class="btn btn-sm btn-default" href="~/Product">
+                        Cancel
+                    </a>
                 </div>
-            </div>
+            </form>
         </div>
-        <!-- /.box-body -->
-        <div class="box-footer">
-            <button type="submit" class="btn btn-sm btn-primary">
-                <i class="fa fa-save"></i> Save
-            </button>
-            <a class="btn btn-sm btn-default" href="~/Product">
-                Cancel
-            </a>
+        <!-- /.tab-pane -->
+        <div class="tab-pane" id="tab_2">
+            <form action="~/Product/Input/@MaybeId(@Model.ProductID)?tab=Attribute" method="POST" role="form">
+                <div class="form-group row">
+                    @foreach (LiteCommerce.DomainModels.Attribute attr in (List<LiteCommerce.DomainModels.Attribute>)ViewData["listAttribute"])
+                    {
+                        <div class="col-sm-6">
+                            <label>@attr.AttributeName:</label>
+                            <input name="@attr.AttributeName" value="" type="text" class="form-control">
+                        </div>
+                    }
+                </div>
+            </form>
         </div>
-    </form>
+        <!-- /.tab-pane -->
+    </div>
+    <!-- /.tab-content -->
 </div>

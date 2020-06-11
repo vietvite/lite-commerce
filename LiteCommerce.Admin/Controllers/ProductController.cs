@@ -14,7 +14,7 @@ using System.IO;
 
 namespace LiteCommerce.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = WebUserRoles.DATA_MANAGER)]
     public class ProductController : Controller
     {
         private readonly ILogger<ProductController> _logger;
