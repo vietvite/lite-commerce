@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace LiteCommerce.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = WebUserRoles.SALEMAN)]
     public class OrderController : Controller
     {
         private readonly ILogger<OrderController> _logger;

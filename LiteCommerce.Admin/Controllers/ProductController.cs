@@ -66,10 +66,14 @@ namespace LiteCommerce.Controllers
                 {
                     ViewData["HeaderTitle"] = "Edit product";
                     Product editProduct = CatalogBLL.GetProduct(Convert.ToInt32(id));
+                    int rowCount = 0;
+                    List<LiteCommerce.DomainModels.Attribute> listOfAttribute =
+                        CatalogBLL.ListOfAttribute(Convert.ToString(editProduct.CategoryID), out rowCount);
                     if (editProduct == null)
                     {
                         return RedirectToAction("Index");
                     }
+                    ViewData["listAttribute"] = listOfAttribute;
                     return View(editProduct);
                 }
             }

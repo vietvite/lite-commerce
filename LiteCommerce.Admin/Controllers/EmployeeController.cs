@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace LiteCommerce.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = WebUserRoles.HR_MANAGER)]
     public class EmployeeController : Controller
     {
         private readonly ILogger<EmployeeController> _logger;

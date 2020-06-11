@@ -12,7 +12,7 @@ using LiteCommerce.DomainModels;
 
 namespace LiteCommerce.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = WebUserRoles.DATA_MANAGER)]
     public class SuppliersController : Controller
     {
         private readonly ILogger<SuppliersController> _logger;

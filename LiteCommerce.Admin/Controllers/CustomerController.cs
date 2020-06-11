@@ -12,7 +12,7 @@ using LiteCommerce.BusinessLayers;
 
 namespace LiteCommerce.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = WebUserRoles.DATA_MANAGER)]
     public class CustomerController : Controller
     {
         private readonly ILogger<CustomerController> _logger;
