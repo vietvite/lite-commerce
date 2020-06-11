@@ -1,52 +1,88 @@
-﻿@{
+﻿@model LiteCommerce.DomainModels.Product
+@{
     ViewData["Title"] = "Products";
     ViewData["HeaderTitle"] = "Manage Products";
 }
 
+@functions {
+    public string usePhotoPathOrDefault(string photoPath)
+    {
+        return string.IsNullOrEmpty(photoPath)
+            ? "/uploads/user.png"
+            : "/uploads/" + photoPath;
+    }
+    public string MaybeId(int id)
+    {
+        return id != 0
+            ? ""+id
+            : "";
+    }
+}
+
 <div class="box box-primary">
-    <form role="form">
+    <form enctype="multipart/form-data" action="~/Product/Input/@MaybeId(@Model.ProductID)" method="POST" role="form">
         <div class="box-header text-right">
             <a href="~/Product">Back to List</a>
         </div>
+        <input name="ProductID" value="@Model.ProductID" readonly hidden/>
         <div class="box-body">
-            <div class="form-group">
-                <label>Product Name:</label>
-                <input type="text" class="form-control" placeholder="Enter Company Name">
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-6">
-                    <label>Supplier:</label>
-                    <select class="form-control">
-                        <option value="">-- Choose Supplier --</option>
-                        @* <option value="USA">USA</option> *@
-                    </select>
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <label>Product Name: @Html.ValidationMessage("ProductName", new { @style="color: #FF0000" }) </label>
+                        <input name="ProductName" value="@Model.ProductName" type="text" class="form-control" placeholder="Enter product Name">
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label>Supplier: @Html.ValidationMessage("SupplierID", new { @style="color: #FF0000" })</label>
+                            <select class="form-control" name="SupplierID">
+                                @foreach (var supplier in LiteCommerce.SelectListHelper.Suppliers())
+                                {
+                                    if(Model.SupplierID == Convert.ToInt32(supplier.Value)) {
+                                        <option value="@supplier.Value" selected>@supplier.Text</option>
+                                    } else {
+                                        <option value="@supplier.Value">@supplier.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Category: @Html.ValidationMessage("CategoryID", new { @style="color: #FF0000" })</label>
+                            <select class="form-control" name="CategoryID">
+                                @foreach (var category in LiteCommerce.SelectListHelper.Categories())
+                                {
+                                    if(Model.CategoryID == Convert.ToInt32(category.Value))
+                                        {
+                                        <option value="@category.Value" selected>@category.Text</option>
+                                    } else 
+                                    {
+                                        <option value="@category.Value">@category.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label>Quantity/Unit:</label>
+                            <input name="QuantityPerUnit" value="@Model.QuantityPerUnit" type="text" class="form-control" placeholder="Quantity/Unit">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Unit price:</label>
+                            <input name="UnitPrice" value="@Model.UnitPrice" type="number" class="form-control" placeholder="Unit price">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="Descriptions" class="form-control" rows="10" placeholder="Enter description">@Model.Descriptions</textarea>
+                    </div>
                 </div>
-                <div class="col-sm-6">
-                    <label>Category:</label>
-                    <select class="form-control">
-                        <option value="">-- Choose Category --</option>
-                        @* <option value="USA">USA</option> *@
-                    </select>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <img id="avatar" class="img-thumbnail" src="@usePhotoPathOrDefault(@Model.PhotoPath)" alt="user">
+                        <input id="PhotoPath_file" type="file" name="PhotoPath" value="@Model.PhotoPath" style="display: none;">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-6">
-                    <label>Address:</label>
-                    <input type="text" class="form-control" placeholder="Address">
-                </div>
-                <div class="col-sm-6">
-                    <label>Address:</label>
-                    <input type="text" class="form-control" placeholder="Address">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Description</label>
-                <textarea class="form-control" rows="10" placeholder="Enter description"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="exampleInputFile">Photo path</label>
-                <input type="file" id="exampleInputFile">
-                <p class="help-block">Example block-level help text here.</p>
             </div>
         </div>
         <!-- /.box-body -->
@@ -54,7 +90,7 @@
             <button type="submit" class="btn btn-sm btn-primary">
                 <i class="fa fa-save"></i> Save
             </button>
-            <a class="btn btn-sm btn-default" href="~/Supplier">
+            <a class="btn btn-sm btn-default" href="~/Product">
                 Cancel
             </a>
         </div>

@@ -1,0 +1,50 @@
+﻿@model LiteCommerce.DomainModels.Product
+@{
+    ViewData["Title"] = "Products";
+    ViewData["HeaderTitle"] = "Manage Products";
+}
+
+@functions {
+    public string usePhotoPathOrDefault(string photoPath)
+        {
+            return string.IsNullOrEmpty(photoPath)
+                ? "/uploads/user.png"
+                : "/uploads/" + photoPath;
+        }
+}
+
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab_1" data-toggle="tab">Product</a></li>
+        <li><a href="#tab_2" data-toggle="tab">Product Attribute</a></li>
+        <li class="pull-right"><a href="~/Product">Back to list</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab_1">
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p><b>ProductName: </b>@Model.ProductName</p>
+                            <p><b>Supplier: </b>@Model.Supplier.CompanyName</p>
+                            <p><b>Category: </b>@Model.Category.CategoryName</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><b>Quantity/Unit: </b>@Model.QuantityPerUnit</p>
+                            <p><b>Unit price: </b>@Model.UnitPrice</p>
+                        </div>
+                    </div>
+                    <p><b>Descriptions: </b>@Model.Descriptions</p>
+                </div>
+                <div class="col-sm-3">
+                    <img id="avatar" class="img-thumbnail" src="@usePhotoPathOrDefault(@Model.PhotoPath)" alt="user">
+                </div>
+            </div>
+        </div>
+        <!-- /.tab-pane -->
+        <div class="tab-pane" id="tab_2">
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+    <!-- /.tab-content -->
+</div>
