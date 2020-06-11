@@ -28,6 +28,7 @@ namespace LiteCommerce.BusinessLayers
             CategoryDB = new DataLayers.SqlServer.CategoryDAL(connectionString);
             ProductDB = new DataLayers.SqlServer.ProductDAL(connectionString);
             CountryDB = new DataLayers.SqlServer.CountryDAL(connectionString);
+            AttributeDB = new DataLayers.SqlServer.AttributeDAL(connectionString);
         }
         private static ISupplierDAL SupplierDB { get; set; }
         private static ICustomerDAL CustomerDB { get; set; }
@@ -36,6 +37,7 @@ namespace LiteCommerce.BusinessLayers
         private static ICategoryDAL CategoryDB { get; set; }
         private static IProductDAL ProductDB { get; set; }
         private static ICountryDAL CountryDB { get; set; }
+        private static IAttributeDAL AttributeDB { get; set; }
 
         #endregion
 
@@ -104,6 +106,12 @@ namespace LiteCommerce.BusinessLayers
             //     pageSize = 1;
             rowCount = CountryDB.Count(searchValue);
             return CountryDB.List(page, pageSize, searchValue);
+        }
+
+        public static List<Attribute> ListOfAttribute(string categoryID, out int rowCount)
+        {
+            rowCount = AttributeDB.Count(categoryID);
+            return AttributeDB.List(categoryID);
         }
 
         public static Supplier GetSupplier(int supplierID)
@@ -225,6 +233,23 @@ namespace LiteCommerce.BusinessLayers
         public static int DeleteCountries(string[] countryIDs)
         {
             return CountryDB.Delete(countryIDs);
+        }
+
+        public static Attribute GetAttribute(int attributeID)
+        {
+            return AttributeDB.Get(attributeID);
+        }
+        public static int AddAttribute(Attribute attribute)
+        {
+            return AttributeDB.Add(attribute);
+        }
+        public static bool UpdateAttribute(Attribute attribute)
+        {
+            return AttributeDB.Update(attribute);
+        }
+        public static int DeleteAttributes(int[] attributeIDs)
+        {
+            return AttributeDB.Delete(attributeIDs);
         }
 
 

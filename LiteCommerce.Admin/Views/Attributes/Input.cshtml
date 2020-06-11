@@ -1,0 +1,47 @@
+﻿@model LiteCommerce.DomainModels.Attribute
+
+@{
+    ViewData["Title"] = "Attributes";
+    ViewData["HeaderTitle"] = "Add Attributes";
+}
+@* Add input tag stand for ID in case edit ~~~ *@
+<div class="box box-primary">
+    <form action="~/Attributes/Input" method="POST" role="form">
+        <div class="box-header text-right">
+            <a href="~/Attributes">Back to List</a>
+        </div>
+        <input type="text" name="AttributeID" value="@Model.AttributeID" hidden readonly/>
+        <div class="box-body">
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label>Category ID: @Html.ValidationMessage("CategoryID", new { @style="color: #FF0000" })</label>
+                    <select class="form-control" name="CategoryID">
+                        @foreach (var category in LiteCommerce.SelectListHelper.Categories())
+                        {
+                            if(Model.CategoryID == Convert.ToInt32(category.Value))
+                            {
+                                <option value="@category.Value" selected>@category.Text</option>
+                            } else 
+                            {
+                                <option value="@category.Value">@category.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label>Attribute name: @Html.ValidationMessage("AttributeName", new { @style="color: #FF0000" })</label>
+                    <input type="text" name="AttributeName" value="@Model.AttributeName" class="form-control" placeholder="Enter attribute name">
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fa fa-save"></i> Save
+            </button>
+            <a class="btn btn-sm btn-default" href="~/Attributes">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
