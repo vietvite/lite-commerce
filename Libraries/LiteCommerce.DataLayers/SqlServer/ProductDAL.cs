@@ -13,20 +13,20 @@ namespace LiteCommerce.DataLayers.SqlServer
         {
             this.connectionString = connectionString;
         }
-        public List<Product> List(int page, int pageSize, string searchValue, string category, string supplier)
+        public List<Product> List(int page, int pageSize, string searchValue, string categoryID, string supplierID)
         {
             List<Product> listProduct = new List<Product>();
             if (!string.IsNullOrEmpty(searchValue))
             {
                 searchValue = "%" + searchValue + "%";
             }
-            if (category == "0")
+            if (string.IsNullOrEmpty(categoryID))
             {
-                category = "";
+                categoryID = "";
             }
-            if (supplier == "0")
+            if (string.IsNullOrEmpty(supplierID))
             {
-                supplier = "";
+                supplierID = "";
             }
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -44,8 +44,8 @@ namespace LiteCommerce.DataLayers.SqlServer
                                                 ON Products.SupplierID = Suppliers.SupplierID
                                         where
                                             ((@searchValue = N'') or (ProductName like @searchValue))
-                                            AND ((@category = N'') or (Products.CategoryID = @category))
-                                            AND ((@supplier = N'') or (Products.SupplierID = @supplier))
+                                            AND ((@categoryID = N'') or (Products.CategoryID = @categoryID))
+                                            AND ((@supplierID = N'') or (Products.SupplierID = @supplierID))
                                     ) as t
                                     where t.RowNumber between @pageSize * (@page -  1) + 1 and @page * @pageSize";
                 cmd.CommandType = CommandType.Text;
@@ -53,8 +53,8 @@ namespace LiteCommerce.DataLayers.SqlServer
                 cmd.Parameters.AddWithValue("@page", page);
                 cmd.Parameters.AddWithValue("@pageSize", pageSize);
                 cmd.Parameters.AddWithValue("@searchValue", searchValue);
-                cmd.Parameters.AddWithValue("@category", category);
-                cmd.Parameters.AddWithValue("@supplier", supplier);
+                cmd.Parameters.AddWithValue("@categoryID", categoryID);
+                cmd.Parameters.AddWithValue("@supplierID", supplierID);
 
                 using (SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
                 {
@@ -90,22 +90,40 @@ namespace LiteCommerce.DataLayers.SqlServer
             return listProduct;
         }
 
-        public int Count(string searchValue)
+        public int Count(string searchValue, string categoryID, string supplierID)
         {
             int count = 0;
             if (!string.IsNullOrEmpty(searchValue))
             {
                 searchValue = "%" + searchValue + "%";
             }
+            if (string.IsNullOrEmpty(categoryID))
+            {
+                categoryID = "";
+            }
+            if (string.IsNullOrEmpty(supplierID))
+            {
+                supplierID = "";
+            }
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "select COUNT(*) from Products where @searchValue = N'' or ProductName like @searchValue";
+                cmd.CommandText = @"SELECT COUNT(*)
+                                    FROM Products
+                                        JOIN Categories
+                                            ON Categories.CategoryID = Products.CategoryID
+                                        JOIN Suppliers
+                                            ON Suppliers.SupplierID = Products.SupplierID
+                                    WHERE ((@searchValue = N'') or (ProductName like @searchValue))
+                                        AND ((@categoryID = N'') or (Products.categoryID = @categoryID))
+                                        AND ((@supplierID = N'') or (Products.SupplierID = @supplierID))";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = connection;
                 cmd.Parameters.AddWithValue("@searchValue", searchValue);
+                cmd.Parameters.AddWithValue("@categoryID", categoryID);
+                cmd.Parameters.AddWithValue("@supplierID", supplierID);
 
                 count = Convert.ToInt32(cmd.ExecuteScalar());
 

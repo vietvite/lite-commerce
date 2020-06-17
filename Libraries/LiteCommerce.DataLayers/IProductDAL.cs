@@ -7,7 +7,7 @@ namespace LiteCommerce.DataLayers
     {
         List<Product> List(int page, int pageSize, string searchValue, string category, string supplier);
 
-        int Count(string searchValue);
+        int Count(string searchValue, string category, string supplier);
 
         Product Get(int productID);
 

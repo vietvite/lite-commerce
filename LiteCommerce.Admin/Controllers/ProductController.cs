@@ -30,8 +30,6 @@ namespace LiteCommerce.Controllers
         {
             int rowCount = 0;
             int pageSize = 10;
-            ViewData["category"] = category;
-            ViewData["supplier"] = supplier;
 
             List<Product> listOfProduct = CatalogBLL.ListOfProduct(page, pageSize, searchValue ?? "", out rowCount, category, supplier);
 
@@ -42,6 +40,8 @@ namespace LiteCommerce.Controllers
                 PageSize = pageSize,
                 RowCount = rowCount,
                 SearchValue = searchValue,
+                SelectedCategory = category,
+                SelectedSupplier = supplier,
             };
 
             return View(model);

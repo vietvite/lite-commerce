@@ -191,7 +191,7 @@ namespace LiteCommerce.BusinessLayers
                 page = 1;
             // if (pageSize < 0)
             //     pageSize = 1;
-            rowCount = ProductDB.Count(searchValue);
+            rowCount = ProductDB.Count(searchValue, category, supplier);
             return ProductDB.List(page, pageSize, searchValue, category, supplier);
         }
         public static Product GetProduct(int productID)

@@ -56,7 +56,7 @@ namespace LiteCommerce
             List<SelectListItem> list = new List<SelectListItem>();
             if (allowSelectAll)
             {
-                list.Add(new SelectListItem() { Value = "0", Text = "-- All suppliers --" });
+                list.Add(new SelectListItem() { Value = "", Text = "-- All suppliers --" });
             }
             int rowCount = 0;
             List<Supplier> listSuppliers = CatalogBLL.ListOfSupplier(1, -1, "", out rowCount);

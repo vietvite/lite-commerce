@@ -9,8 +9,20 @@
 @functions{
     public string maybeSearchQuery(string SearchValue)
     {
-        return SearchValue != ""
+        return !string.IsNullOrEmpty(SearchValue)
             ? string.Format("&searchvalue={0}", SearchValue)
+            : "";
+    }
+    public string maybeSupplierQuery(string supplier)
+    {
+        return !string.IsNullOrEmpty(supplier)
+            ? string.Format("&supplier={0}", supplier)
+            : "";
+    }
+    public string maybeCategoryQuery(string category)
+    {
+        return !string.IsNullOrEmpty(category)
+            ? string.Format("&category={0}", category)
             : "";
     }
     public string justPageQuery(int page)
@@ -38,7 +50,7 @@
                         
                         @foreach (var category in LiteCommerce.SelectListHelper.Categories())
                         {
-                            if((string)ViewData["category"] == category.Value)
+                            if(Model.SelectedCategory == category.Value)
                             {
                                 <option value="@category.Value" selected>@category.Text</option>
                             } else 
@@ -57,7 +69,7 @@
                         
                         @foreach (var supplier in LiteCommerce.SelectListHelper.Suppliers())
                         {
-                            if((string)ViewData["supplier"] == supplier.Value) 
+                            if(Model.SelectedSupplier == supplier.Value) 
                             {
                                 <option value="@supplier.Value" selected>@supplier.Text</option>
                             } else
@@ -145,7 +157,7 @@
         <div class="box-footer clearfix text-center">
             <ul class="pagination pagination-sm no-margin pull-right">
                 @if(Model.Page > 1) {
-                    <li><a href="~/Product?@maybeSearchQuery(@Model.SearchValue)">«</a></li>
+                    <li><a href="~/Product?@maybeSearchQuery(@Model.SearchValue)@maybeCategoryQuery(Model.SelectedCategory)@maybeSupplierQuery(Model.SelectedSupplier)">«</a></li>
                 }
                 @for (int p = 1; p <= Model.PageCount; p++)
                 {
@@ -155,11 +167,11 @@
                     }
                     else
                     {
-                        <li><a href="~/Product?@justPageQuery(@p)@maybeSearchQuery(@Model.SearchValue)">@p</a></li>
+                        <li><a href="~/Product?@justPageQuery(@p)@maybeSearchQuery(@Model.SearchValue)@maybeCategoryQuery(Model.SelectedCategory)@maybeSupplierQuery(Model.SelectedSupplier)">@p</a></li>
                     }
                 }
                 @if(Model.Page < Model.PageCount) {
-                    <li><a href="~/Product?@justPageQuery(@Model.PageCount)@maybeSearchQuery(@Model.SearchValue)">»</a></li>
+                    <li><a href="~/Product?@justPageQuery(@Model.PageCount)@maybeSearchQuery(@Model.SearchValue)@maybeCategoryQuery(Model.SelectedCategory)@maybeSupplierQuery(Model.SelectedSupplier)">»</a></li>
                 }
             </ul>
         </div>
