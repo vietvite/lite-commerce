@@ -43,9 +43,9 @@ namespace LiteCommerce.DataLayers.SqlServer
                                             JOIN Suppliers 
                                                 ON Products.SupplierID = Suppliers.SupplierID
                                         where
-                                            (@searchValue = N'') or (ProductName like @searchValue)
-                                            AND (@category = N'') or (Products.CategoryID = @category)
-                                            AND (@supplier = N'') or (Products.SupplierID = @supplier)
+                                            ((@searchValue = N'') or (ProductName like @searchValue))
+                                            AND ((@category = N'') or (Products.CategoryID = @category))
+                                            AND ((@supplier = N'') or (Products.SupplierID = @supplier))
                                     ) as t
                                     where t.RowNumber between @pageSize * (@page -  1) + 1 and @page * @pageSize";
                 cmd.CommandType = CommandType.Text;
