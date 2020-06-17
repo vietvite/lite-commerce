@@ -1,0 +1,193 @@
+﻿@model LiteCommerce.Models.OrderPaginationResult
+
+@{
+    ViewData["Title"] = "Orders";
+    ViewData["HeaderTitle"] = "Manage Orders";
+    int i = (Model.Page - 1) * Model.PageSize;
+}
+
+@functions{
+    public string maybeSearchQuery(string SearchValue)
+    {
+        return SearchValue != ""
+            ? string.Format("&searchvalue={0}", SearchValue)
+            : "";
+    }
+    public string justPageQuery(int page)
+    {
+        return "page=" + page;
+    }
+    public string singularOrPluralWord(int count, string singularWord, string pluralWord)
+    {
+        return count > 1
+            ? pluralWord
+            : singularWord;
+    }
+}
+
+<div class="box box-primary">
+    <div class="box-body">
+        <form action="~/Orders" method="GET" >
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <label>Countries</label>
+                    <select class="form-control" name="country">
+                        @foreach (var country in LiteCommerce.SelectListHelper.Countries())
+                        {
+                            if(Model.selectedCountry == country.Value)
+                            {
+                                <option value="@country.Value" selected>@country.Text</option>
+                            } else {
+                                <option value="@country.Value">@country.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label>Categories</label>
+                    <select class="form-control" name="category">
+                        @foreach (var category in LiteCommerce.SelectListHelper.Categories())
+                        {
+                            if(Model.selectedCategory == category.Value)
+                            {
+                                <option value="@category.Value" selected>@category.Text</option>
+                            } else 
+                            {
+                                <option value="@category.Value">@category.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label>Employees</label>
+                    <select class="form-control" name="employee">
+                        @foreach (var employee in LiteCommerce.SelectListHelper.Employees())
+                        {
+                            if(Model.selectedEmployee == employee.Value)
+                            {
+                                <option value="@employee.Value" selected>@employee.Text</option>
+                            } else 
+                            {
+                                <option value="@employee.Value">@employee.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label>Shippers</label>
+                    <select class="form-control" name="shipper">
+                        @foreach (var shipper in LiteCommerce.SelectListHelper.Shippers())
+                        {
+                            if(Model.selectedShipper == shipper.Value)
+                            {
+                                <option value="@shipper.Value" selected>@shipper.Text</option>
+                            } else 
+                            {
+                                <option value="@shipper.Value">@shipper.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3 col-sm-offset-9">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-block btn-default"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<form id="delete-selected" action="~/Orders/Delete" method="POST">
+    <div class="container-fluid row" style="margin-bottom:10px;">
+        <div class="col-sm-8">
+            There are <b>@Model.RowCount</b> @singularOrPluralWord(Model.RowCount, "order", "orders"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
+        </div>
+        <div class="col-md-4 text-right">
+            <div class="btn-group">
+                <a href="~/Orders/Input" class="btn btn-sm btn-primary">Add Order</a>
+                <button type="submit" class="btn btn-sm btn-danger">Delete Orders</button>
+            </div>
+        </div>
+    </div>
+    <div class="box box-success">
+        <div class="box-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width:30px">
+                            <input type="checkbox" id="checkAll" />
+                        </th>
+                        <th style="width:50px">#</th>
+                        <th style="width:auto">Order ID</th>
+                        <th style="width:auto">Customer</th>
+                        <th style="width:auto">Employee</th>
+                        <th style="width:auto">Shipper</th>
+                        <th style="width:auto">Freight</th>
+                        <th style="width:auto">Date</th>
+                        <th style="width:150px">Address</th>
+                        <th style="width:90px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model.Data)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="customerIDs" value="@order.OrderID" />
+                            </td>
+                            <td>@(++i)</td>
+                            <td><p title="OrderID">@order.OrderID</p></td>
+                            <td><p title="Customer">@order.Customer.CompanyName</p></td>
+                            <td><p title="Employee">@order.Employee.FirstName @order.Employee.LastName</p></td>
+                            <td><p title="Shipper">@order.Shipper.CompanyName</p></td>
+                            <td><p title="Freight">@order.Freight</p></td>
+                            <td>
+                                <span style="display:block" title="OrderDate">@string.Format("{0:dd/MM/yyyy}", order.OrderDate)</span>
+                                <span style="display:block" title="RequiredDate">@string.Format("{0:dd/MM/yyyy}", order.RequiredDate)</span>
+                                <span style="display:block" title="ShippedDate">@string.Format("{0:dd/MM/yyyy}", order.ShippedDate)</span>
+                            </td>
+                            <td>
+                                <span style="display:block" title="ShipAddress">@order.ShipAddress</span>
+                                <span style="display:block" title="ShipCity">@order.ShipCity</span>
+                                <span style="display:block" title="ShipCountry">@order.ShipCountry</span>
+                            </td>
+                            <td class="text-right">
+                                <a class="btn btn-sm btn-default" href="~/Orders/Review/@order.OrderID/">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a class="btn btn-sm btn-default" href="~/Orders/New/@order.OrderID/">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer clearfix text-center">
+            <ul class="pagination pagination-sm no-margin pull-right">
+                @if(Model.Page > 1) {
+                    <li><a href="~/Orders?@maybeSearchQuery(@Model.SearchValue)">«</a></li>
+                }
+                @for (int p = 1; p <= Model.PageCount; p++)
+                {
+                    if (p == Model.Page)
+                    {
+                        <li class="active"><a href="">@p</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="~/Orders?@justPageQuery(@p)@maybeSearchQuery(@Model.SearchValue)">@p</a></li>
+                    }
+                }
+                @if(Model.Page < Model.PageCount) {
+                    <li><a href="~/Orders?@justPageQuery(@Model.PageCount)@maybeSearchQuery(@Model.SearchValue)">»</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</form>

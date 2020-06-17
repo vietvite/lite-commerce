@@ -29,6 +29,7 @@ namespace LiteCommerce.BusinessLayers
             ProductDB = new DataLayers.SqlServer.ProductDAL(connectionString);
             CountryDB = new DataLayers.SqlServer.CountryDAL(connectionString);
             AttributeDB = new DataLayers.SqlServer.AttributeDAL(connectionString);
+            OrderDB = new DataLayers.SqlServer.OrderDAL(connectionString);
         }
         private static ISupplierDAL SupplierDB { get; set; }
         private static ICustomerDAL CustomerDB { get; set; }
@@ -38,10 +39,11 @@ namespace LiteCommerce.BusinessLayers
         private static IProductDAL ProductDB { get; set; }
         private static ICountryDAL CountryDB { get; set; }
         private static IAttributeDAL AttributeDB { get; set; }
+        private static IOrderDAL OrderDB { get; set; }
 
         #endregion
 
-        #region Khai báo các chức năng xử lý nghiệp vụ
+        #region Supplier
         public static List<Supplier> ListOfSupplier(int page, int pageSize, string searchValue, out int rowCount)
         {
             if (page < 1)
@@ -51,69 +53,6 @@ namespace LiteCommerce.BusinessLayers
             rowCount = SupplierDB.Count(searchValue);
             return SupplierDB.List(page, pageSize, searchValue);
         }
-        public static List<Customer> ListOfCustomer(int page, int pageSize, string searchValue, out int rowCount)
-        {
-            if (page < 1)
-                page = 1;
-            if (pageSize < 0)
-                pageSize = 1;
-            rowCount = CustomerDB.Count(searchValue);
-            return CustomerDB.List(page, pageSize, searchValue);
-        }
-        public static List<Shipper> ListOfShipper(int page, int pageSize, string searchValue, out int rowCount)
-        {
-            if (page < 1)
-                page = 1;
-            if (pageSize < 0)
-                pageSize = 1;
-            rowCount = ShipperDB.Count(searchValue);
-            return ShipperDB.List(page, pageSize, searchValue);
-        }
-        public static List<Employee> ListOfEmployee(int page, int pageSize, string searchValue, out int rowCount)
-        {
-            if (page < 1)
-                page = 1;
-            if (pageSize < 0)
-                pageSize = 1;
-            rowCount = EmployeeDB.Count(searchValue);
-            return EmployeeDB.List(page, pageSize, searchValue);
-        }
-        public static List<Category> ListOfCategory(int page, int pageSize, string searchValue, out int rowCount)
-        {
-            if (page < 1)
-                page = 1;
-            // if (pageSize < 0)
-            //     pageSize = 1;
-            rowCount = CategoryDB.Count(searchValue);
-            return CategoryDB.List(page, pageSize, searchValue);
-        }
-
-        public static List<Product> ListOfProduct(int page, int pageSize, string searchValue, out int rowCount, string category, string supplier)
-        {
-            if (page < 1)
-                page = 1;
-            // if (pageSize < 0)
-            //     pageSize = 1;
-            rowCount = ProductDB.Count(searchValue);
-            return ProductDB.List(page, pageSize, searchValue, category, supplier);
-        }
-
-        public static List<Country> ListOfCountry(int page, int pageSize, string searchValue, out int rowCount)
-        {
-            if (page < 1)
-                page = 1;
-            // if (pageSize < 0)
-            //     pageSize = 1;
-            rowCount = CountryDB.Count(searchValue);
-            return CountryDB.List(page, pageSize, searchValue);
-        }
-
-        public static List<Attribute> ListOfAttribute(string categoryID, out int rowCount)
-        {
-            rowCount = AttributeDB.Count(categoryID);
-            return AttributeDB.List(categoryID);
-        }
-
         public static Supplier GetSupplier(int supplierID)
         {
             return SupplierDB.Get(supplierID);
@@ -131,25 +70,18 @@ namespace LiteCommerce.BusinessLayers
             return SupplierDB.Delete(supplierID);
         }
 
+        #endregion
 
-        public static Category GetCategory(int categoryID)
+        #region Customer
+        public static List<Customer> ListOfCustomer(int page, int pageSize, string searchValue, out int rowCount, string country)
         {
-            return CategoryDB.Get(categoryID);
+            if (page < 1)
+                page = 1;
+            if (pageSize < 0)
+                pageSize = 1;
+            rowCount = CustomerDB.Count(searchValue, country);
+            return CustomerDB.List(page, pageSize, searchValue, country);
         }
-        public static int AddCategory(Category category)
-        {
-            return CategoryDB.Add(category);
-        }
-        public static bool UpdateCategory(Category category)
-        {
-            return CategoryDB.Update(category);
-        }
-        public static int DeleteCategories(int[] categoryID)
-        {
-            return CategoryDB.Delete(categoryID);
-        }
-
-
         public static Customer GetCustomer(string customerID)
         {
             return CustomerDB.Get(customerID);
@@ -166,7 +98,18 @@ namespace LiteCommerce.BusinessLayers
         {
             return CustomerDB.Delete(customerID);
         }
+        #endregion
 
+        #region Shipper
+        public static List<Shipper> ListOfShipper(int page, int pageSize, string searchValue, out int rowCount)
+        {
+            if (page < 1)
+                page = 1;
+            // if (pageSize < 0)
+            //     pageSize = 1;
+            rowCount = ShipperDB.Count(searchValue);
+            return ShipperDB.List(page, pageSize, searchValue);
+        }
         public static Shipper GetShipper(int shipperID)
         {
             return ShipperDB.Get(shipperID);
@@ -183,7 +126,18 @@ namespace LiteCommerce.BusinessLayers
         {
             return ShipperDB.Delete(shipperID);
         }
+        #endregion
 
+        #region Employee
+        public static List<Employee> ListOfEmployee(int page, int pageSize, string searchValue, out int rowCount)
+        {
+            if (page < 1)
+                page = 1;
+            // if (pageSize < 0)
+            //     pageSize = 1;
+            rowCount = EmployeeDB.Count(searchValue);
+            return EmployeeDB.List(page, pageSize, searchValue);
+        }
         public static Employee GetEmployee(int employeeID)
         {
             return EmployeeDB.Get(employeeID);
@@ -200,7 +154,46 @@ namespace LiteCommerce.BusinessLayers
         {
             return EmployeeDB.Delete(employeeID);
         }
+        #endregion
 
+        #region Category
+        public static List<Category> ListOfCategory(int page, int pageSize, string searchValue, out int rowCount)
+        {
+            if (page < 1)
+                page = 1;
+            // if (pageSize < 0)
+            //     pageSize = 1;
+            rowCount = CategoryDB.Count(searchValue);
+            return CategoryDB.List(page, pageSize, searchValue);
+        }
+        public static Category GetCategory(int categoryID)
+        {
+            return CategoryDB.Get(categoryID);
+        }
+        public static int AddCategory(Category category)
+        {
+            return CategoryDB.Add(category);
+        }
+        public static bool UpdateCategory(Category category)
+        {
+            return CategoryDB.Update(category);
+        }
+        public static int DeleteCategories(int[] categoryID)
+        {
+            return CategoryDB.Delete(categoryID);
+        }
+        #endregion
+
+        #region Product
+        public static List<Product> ListOfProduct(int page, int pageSize, string searchValue, out int rowCount, string category, string supplier)
+        {
+            if (page < 1)
+                page = 1;
+            // if (pageSize < 0)
+            //     pageSize = 1;
+            rowCount = ProductDB.Count(searchValue);
+            return ProductDB.List(page, pageSize, searchValue, category, supplier);
+        }
         public static Product GetProduct(int productID)
         {
             return ProductDB.Get(productID);
@@ -217,7 +210,18 @@ namespace LiteCommerce.BusinessLayers
         {
             return ProductDB.Delete(productIDs);
         }
+        #endregion
 
+        #region Country
+        public static List<Country> ListOfCountry(int page, int pageSize, string searchValue, out int rowCount)
+        {
+            if (page < 1)
+                page = 1;
+            // if (pageSize < 0)
+            //     pageSize = 1;
+            rowCount = CountryDB.Count(searchValue);
+            return CountryDB.List(page, pageSize, searchValue);
+        }
         public static Country GetCountry(string countryID)
         {
             return CountryDB.Get(countryID);
@@ -234,7 +238,14 @@ namespace LiteCommerce.BusinessLayers
         {
             return CountryDB.Delete(countryIDs);
         }
+        #endregion
 
+        #region Attribute
+        public static List<Attribute> ListOfAttribute(string categoryID, out int rowCount)
+        {
+            rowCount = AttributeDB.Count(categoryID);
+            return AttributeDB.List(categoryID);
+        }
         public static Attribute GetAttribute(int attributeID)
         {
             return AttributeDB.Get(attributeID);
@@ -251,8 +262,40 @@ namespace LiteCommerce.BusinessLayers
         {
             return AttributeDB.Delete(attributeIDs);
         }
-
-
         #endregion
+
+        #region Order
+        public static List<Order> ListOfOrder(
+            int page,
+            int pageSize,
+            out int rowCount,
+            string country,
+            string category,
+            string employee,
+            string shipper
+        )
+        {
+            rowCount = OrderDB.Count(country, category, employee, shipper);
+            return OrderDB.List(page, pageSize, country, category, employee, shipper);
+        }
+        public static List<OrderDetails> GetOrder(int orderID)
+        {
+            return OrderDB.Get(orderID);
+        }
+        public static int AddOrder(Order order)
+        {
+            return OrderDB.Add(order);
+        }
+        public static bool UpdateOrder(Order order)
+        {
+            return OrderDB.Update(order);
+        }
+        public static int DeleteOrders(int[] orderIDs)
+        {
+            return OrderDB.Delete(orderIDs);
+        }
+        #endregion
+
+
     }
 }

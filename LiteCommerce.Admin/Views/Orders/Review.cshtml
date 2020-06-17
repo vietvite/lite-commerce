@@ -1,0 +1,86 @@
+﻿@model List<LiteCommerce.DomainModels.OrderDetails>
+@{
+    ViewData["Title"] = "Orders";
+    ViewData["HeaderTitle"] = "Manage Orders";
+    int i = 0;
+}
+
+@functions {
+    public string usePhotoPathOrDefault(string photoPath)
+    {
+        return string.IsNullOrEmpty(photoPath)
+            ? "/uploads/user.png"
+            : "/uploads/" + photoPath;
+    }
+
+    Func<decimal, decimal, decimal> CalcDiscountPrice =
+        (UnitPrice, Discount) => UnitPrice - (UnitPrice * Discount);
+
+    Func<List<LiteCommerce.DomainModels.OrderDetails>, decimal> CalcTotalPrice =
+        list => list.Aggregate((decimal)0, (acc, product)
+            => acc += product.UnitPrice - (product.UnitPrice * product.Discount));
+
+}
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-tag"></i> Order Info</h3>
+        <a class="pull-right" href="~/Orders">Back to List</a>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-sm-4">
+                <p><b>Order ID: </b>@Model.First().OrderID</p>
+                <p><b>Customer company: </b>@Model.First().Customer.CompanyName</p>
+                <p><b>Shipper company: </b>@Model.First().Shipper.CompanyName</p>
+                <p><b>Employee: </b>@Model.First().Employee.FirstName @Model.First().Employee.LastName</p>
+            </div>
+            <div class="col-sm-4">
+                <p><b>Order Date: </b>@string.Format("{0:dd/MM/yyyy}", Model.First().OrderDate)</p>
+                <p><b>Required Date: </b>@string.Format("{0:dd/MM/yyyy}", Model.First().RequiredDate)</p>
+                <p><b>Shipped Date: </b>@string.Format("{0:dd/MM/yyyy}", Model.First().ShippedDate)</p>
+                <p><b>Freight: </b>@Model.First().Freight</p>
+            </div>
+            <div class="col-sm-4">
+                <p><b>Ship Address: </b>@Model.First().ShipAddress</p>
+                <p><b>Ship City: </b>@Model.First().ShipCity</p>
+                <p><b>Ship Country: </b>@Model.First().ShipCountry</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="box box-default color-palette-box">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-tag"></i> Order Products</h3>
+        <span class="pull-right" style="font-size: 15px;font-weight: bolder;margin-right: 28px;">Total: @CalcTotalPrice(Model)</span>
+    </div>
+    <div class="box-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width:50px">#</th>
+                    <th style="width:auto">Product ID</th>
+                    <th style="width:auto">Product Name</th>
+                    <th style="width:auto">Quantity</th>
+                    <th style="width:auto">Unit Price</th>
+                    <th style="width:auto">Discount(%)</th>
+                    <th style="width:140px">Discount Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model)
+                {
+                    <tr>
+                        <td>@(++i)</td>
+                        <td><p>@product.Product.ProductID</p></td>
+                        <td><p>@product.Product.ProductName</p></td>
+                        <td><p>@product.Quantity</p></td>
+                        <td><p>@product.UnitPrice</p></td>
+                        <td><p>@product.Discount</p></td>
+                        <td><p>@CalcDiscountPrice(product.UnitPrice, product.Discount)</p></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

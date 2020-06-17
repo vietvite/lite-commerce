@@ -1,0 +1,85 @@
+﻿@model LiteCommerce.DomainModels.Customer
+@{
+    ViewData["Title"] = "Add order";
+    ViewData["HeaderTitle"] = "Add order";
+}
+
+<div class="box box-primary">
+    <form action="~/Customer/Input" method="POST" role="form">
+        <div class="box-header text-right">
+            <a href="~/Customer">Back to List</a>
+        </div>
+        <input name="CustomerID" value="@Model.CustomerID" type="text" hidden readonly>
+        <div class="box-body">
+            <div class="form-group">
+                <label>Company Name: @Html.ValidationMessage("CompanyName", new { @style="color: #FF0000" }) </label>
+                <input name="CompanyName" value="@Model.CompanyName" type="text" class="form-control" placeholder="Enter company Name">
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label>Contact Name:</label>
+                    <input name="ContactName" value="@Model.ContactName" type="text" class="form-control" placeholder="Contact Name">
+                </div>
+                <div class="col-sm-6">
+                    <label>Contact Title:</label>
+                    <input name="ContactTitle" value="@Model.ContactTitle" type="text" class="form-control" placeholder="Ex: Sale Manager">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Address:</label>
+                <input name="Address" value="@Model.Address" type="text" class="form-control" placeholder="Address">
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label>Country:</label>
+                    <select class="form-control" name="Country">
+                        @if(string.IsNullOrEmpty(Model.Country)) {
+                            <option value="" selected>-- Select Country --</option>
+                        }
+                        @foreach (var country in LiteCommerce.SelectListHelper.Countries())
+                        {
+                            if(Model.Country == country.Value) {
+                                <option value="@country.Value" selected>@country.Text</option>
+                            } else {
+                                <option value="@country.Value">@country.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label>City:</label>
+                    <input name="City" value="@Model.City" type="text" class="form-control" placeholder="Ex: New Orleans">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label>Phone:</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <input name="Phone" value="@Model.Phone" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label>Fax:</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-fax"></i>
+                        </div>
+                        <input name="Fax" value="@Model.Fax" type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fa fa-save"></i> Save
+            </button>
+            <a class="btn btn-sm btn-default" href="~/Supplier">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
