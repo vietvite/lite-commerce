@@ -75,7 +75,7 @@ namespace LiteCommerce.Controllers
                 {
                     new Claim("UserID", user.UserID),
                     new Claim("FullName", user.Fullname),
-                    new Claim("GroupName", WebUserRoles.STAFF),
+                    new Claim(ClaimTypes.Role, user.Groupname),
                     new Claim("LoginTime", Convert.ToString(DateTime.Now)),
                     // new Claim("SessionID", _contextAccessor.HttpContext.Session.Id),
                     new Claim("ClientIP", _contextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()),

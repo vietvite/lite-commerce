@@ -65,6 +65,7 @@ namespace LiteCommerce.DataLayers
                         Fullname = employee.LastName + " " + employee.FirstName,
                         Photo = employee.PhotoPath,
                         Title = employee.Title,
+                        Groupname = employee.Roles,
                     };
                 }
             }
