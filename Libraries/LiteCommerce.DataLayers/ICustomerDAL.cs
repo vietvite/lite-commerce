@@ -5,9 +5,9 @@ namespace LiteCommerce.DataLayers
 {
     public interface ICustomerDAL
     {
-        List<Customer> List(int page, int pageSize, string searchValue);
+        List<Customer> List(int page, int pageSize, string searchValue, string country);
 
-        int Count(string searchValue);
+        int Count(string searchValue, string country);
 
         Customer Get(string customerID);
 

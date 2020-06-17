@@ -13,7 +13,7 @@ namespace LiteCommerce.DataLayers.SqlServer
         {
             this.connectionString = connectionString;
         }
-        public List<Customer> List(int page, int pageSize, string searchValue)
+        public List<Customer> List(int page, int pageSize, string searchValue, string country)
         {
             List<Customer> listCustomer = new List<Customer>();
             if (!string.IsNullOrEmpty(searchValue))
@@ -25,9 +25,12 @@ namespace LiteCommerce.DataLayers.SqlServer
                 conn.Open();
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = @"select * from (
-	                                    select ROW_NUMBER() over(order by CompanyName) as RowNumber, Customers.*
-	                                    from Customers
-	                                    where (@searchValue = N'') or (CompanyName like @searchValue)
+                                        select ROW_NUMBER() over(order by CompanyName) as RowNumber, Customers.*
+                                        from Customers
+                                        where 
+                                            ((@searchValue = N'') or (CompanyName like @searchValue))
+                                            AND 
+                                            ((@country = N'') or (Country = @country))
                                     ) as t
                                     where t.RowNumber between @pageSize * (@page -  1) + 1 and @page * @pageSize";
                 cmd.CommandType = CommandType.Text;
@@ -35,6 +38,7 @@ namespace LiteCommerce.DataLayers.SqlServer
                 cmd.Parameters.AddWithValue("@page", page);
                 cmd.Parameters.AddWithValue("@pageSize", pageSize);
                 cmd.Parameters.AddWithValue("@searchValue", searchValue);
+                cmd.Parameters.AddWithValue("@country", country);
 
                 using (SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
                 {
@@ -61,7 +65,7 @@ namespace LiteCommerce.DataLayers.SqlServer
             return listCustomer;
         }
 
-        public int Count(string searchValue)
+        public int Count(string searchValue, string country)
         {
             int count = 0;
             if (!string.IsNullOrEmpty(searchValue))
@@ -235,7 +239,7 @@ namespace LiteCommerce.DataLayers.SqlServer
                         countDeleted += 1;
                 }
 
-                connection.Close(); 
+                connection.Close();
             }
             return countDeleted;
         }

@@ -22,11 +22,11 @@ namespace LiteCommerce.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index(int page = 1, string searchValue = "")
+        public IActionResult Index(int page = 1, string searchValue = "", string country = "")
         {
             int rowCount = 0;
             int pageSize = 10;
-            List<Customer> listOfCustomer = CatalogBLL.ListOfCustomer(page, pageSize, searchValue ?? "", out rowCount);
+            List<Customer> listOfCustomer = CatalogBLL.ListOfCustomer(page, pageSize, searchValue ?? "", out rowCount, country ?? "");
 
             var model = new Models.CustomerPaginationResult()
             {
@@ -35,6 +35,7 @@ namespace LiteCommerce.Controllers
                 PageSize = pageSize,
                 RowCount = rowCount,
                 SearchValue = searchValue,
+                Country = country,
             };
 
             return View(model);
