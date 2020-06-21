@@ -4,7 +4,7 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="~/uploads/@(User.FindFirst("Photo").Value)" class="img-circle" alt="User Image">
+          <img src="@LiteCommerce.Common.ViewHelper.EitherPhotoPathOrDefault(User.FindFirst("Photo").Value)" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>@(User.FindFirst("Fullname").Value)</p>
@@ -28,51 +28,46 @@
 
         <li><a href="~/Dashboard"><i class="fa fa-book"></i> <span>Dashboard</span></a></li>
 
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-list"></i> <span>Catalog</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="~/Suppliers"><i class="fa fa-circle-o"></i> Suppliers</a></li>
-            <li><a href="~/Customer"><i class="fa fa-circle-o"></i> Customer</a></li>
-            <li><a href="~/Shipper"><i class="fa fa-circle-o"></i> Shipper</a></li>
-            <li><a href="~/Categories"><i class="fa fa-circle-o"></i> Categories</a></li>
-            <li><a href="~/Product"><i class="fa fa-circle-o"></i> Product</a></li>
-          </ul>
-        </li>
+        @if(User.IsInRole(LiteCommerce.WebUserRoles.DATA_MANAGER)) {
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-circle"></i> <span>Catalog</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="~/Suppliers"><i class="fa fa-circle-o"></i> Suppliers</a></li>
+              <li><a href="~/Customer"><i class="fa fa-circle-o"></i> Customer</a></li>
+              <li><a href="~/Shipper"><i class="fa fa-circle-o"></i> Shipper</a></li>
+              <li><a href="~/Categories"><i class="fa fa-circle-o"></i> Categories</a></li>
+              <li><a href="~/Product"><i class="fa fa-circle-o"></i> Product</a></li>
+              <li><a href="~/Countries"><i class="fa fa-circle-o"></i> <span>Countries</span></a></li>
+            </ul>
+          </li>
+        }
 
-        <li><a href="~/Employee"><i class="fa fa-list"></i> <span>Employee</span></a></li>
+        @if(User.IsInRole(LiteCommerce.WebUserRoles.HR_MANAGER)) {
+          <li><a href="~/Employee"><i class="fa fa-group"></i> <span>Employee</span></a></li>
+        }
         
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-list"></i> <span>Manager Orders</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="~/Orders"><i class="fa fa-circle-o"></i> List</a></li>
-            <li><a href="~/Orders/New"><i class="fa fa-circle-o"></i> Create New</a></li>
-          </ul>
-        </li>
+        @if(User.IsInRole(LiteCommerce.WebUserRoles.SALEMAN)) {
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-list"></i> <span>Manager Orders</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="~/Orders"><i class="fa fa-circle-o"></i> List</a></li>
+              <li><a href="~/Orders/New"><i class="fa fa-circle-o"></i> Create New</a></li>
+            </ul>
+          </li>
+        }
 
-        <li><a href="~/Reports"><i class="fa fa-list"></i> <span>Reports</span></a></li>
+        <li><a href="~/Reports"><i class="fa fa-file-text-o"></i> <span>Reports</span></a></li>
 
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-list"></i> <span>Others</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="~/Countries"><i class="fa fa-circle-o"></i> <span>Countries</span></a></li>
-            <li><a href="~/Attributes"><i class="fa fa-circle-o"></i> <span>Attributes</span></a></li>
-          </ul>
-        </li>
       </ul>
     </section>
     <!-- /.sidebar -->
