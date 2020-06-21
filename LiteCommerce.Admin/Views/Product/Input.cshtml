@@ -2,24 +2,24 @@
 @{
     ViewData["Title"] = "Products";
     ViewData["HeaderTitle"] = "Manage Products";
+    List<LiteCommerce.DomainModels.ProductAttribute> listAttribute = (List<LiteCommerce.DomainModels.ProductAttribute>)ViewData["listAttribute"];
 }
 
 @functions {
     public string usePhotoPathOrDefault(string photoPath)
     {
         return string.IsNullOrEmpty(photoPath)
-            ? "/uploads/user.png"
+            ? "/images/no_image.jpg"
             : "/uploads/" + photoPath;
     }
     public string MaybeId(int id)
     {
         return id != 0
-            ? ""+id
+            ? "" + id
             : "";
     }
 }
 
-    
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab">Product</a></li>
@@ -99,18 +99,95 @@
             </form>
         </div>
         <!-- /.tab-pane -->
+
         <div class="tab-pane" id="tab_2">
-            <form action="~/Product/Input/@MaybeId(@Model.ProductID)?tab=Attribute" method="POST" role="form">
-                <div class="form-group row">
-                    @foreach (LiteCommerce.DomainModels.Attribute attr in (List<LiteCommerce.DomainModels.Attribute>)ViewData["listAttribute"])
-                    {
-                        <div class="col-sm-6">
-                            <label>@attr.AttributeName:</label>
-                            <input name="@attr.AttributeName" value="" type="text" class="form-control">
+            <div class="text-right" style="margin-bottom: 14px;">
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
+                    Add Attribute
+                </button>
+            </div>
+
+            <!-- Edit attribute -->
+            <form id="edit-attribute" action="~/Product/Attribute/@MaybeId(@Model.ProductID)" method="POST"  role="form">
+                @for (int i = 0; i < listAttribute.Count; i++)
+                {
+                    @Html.TextBoxFor(m => listAttribute[i].AttributeID,
+                                new { @type="text", @class="form-control", @placehoder="Input search value...", @readonly = "readonly", @style = "display: none;"})
+                    @Html.TextBoxFor(m => listAttribute[i].ProductID,
+                                new { @type="text", @class="form-control", @placehoder="Input search value...", @readonly = "readonly", @style = "display: none;"})
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label>Attribute name</label>
+                            @Html.TextBoxFor(m => listAttribute[i].AttributeName,
+                                new { @type="text", @class="form-control", @placehoder="Input search value..."})
                         </div>
-                    }
+                        <div class="col-sm-6">
+                            <label>Attribute value</label>
+                            @Html.TextBoxFor(m => listAttribute[i].AttributeValues,
+                                new { @type="text", @class="form-control", @placehoder="Input search value..."})
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Display order</label>
+                            @Html.TextBoxFor(m => listAttribute[i].DisplayOrder,
+                                new { @type="text", @class="form-control", @placehoder="Input search value..."})
+                        </div>
+                        <div class="col-sm-1">
+                            <label></label>
+                            <a id="delete-attribute" type="button" href="~/Product/Attribute/@MaybeId(@Model.ProductID)?attributeID=@listAttribute[i].AttributeID" class="btn btn-default" style="margin-top: 24px;">
+                                <i class="fa fa-remove"></i>
+                            </a>
+                        </div>
+                    </div>
+                }
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        <i class="fa fa-save"></i> Save
+                    </button>
+                    <a class="btn btn-sm btn-default" href="~/Product">
+                        Cancel
+                    </a>
                 </div>
             </form>
+
+            <!-- Add attribute modal -->
+            <div class="modal fade" id="modal-default" style="display: none;">
+                <div class="modal-dialog">
+                    <form action="~/Product/Input/@MaybeId(@Model.ProductID)?query=AddAttribute" method="POST" role="form">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title">Add attribute</h4>
+                            </div>
+                            <div class="modal-body">
+                                <input name="ProductID" value="@Model.ProductID" type="text" hidden readonly>
+                                <div class="form-group row">
+                                    <div class="col-sm-9">
+                                        <label>Attribute name</label>
+                                        <input name="AttributeName" value="" type="text" class="form-control" placeholder="Enter attribute name">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Display order</label>
+                                        <input name="DisplayOrder" value="" type="number" class="form-control" placeholder="Enter order">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <label>Attribute value</label>
+                                        <textarea name="AttributeValues" class="form-control" rows="10" placeholder="Enter attribute value"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
         </div>
         <!-- /.tab-pane -->
     </div>

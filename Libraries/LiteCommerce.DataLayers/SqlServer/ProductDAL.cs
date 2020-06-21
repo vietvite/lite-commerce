@@ -20,11 +20,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             {
                 searchValue = "%" + searchValue + "%";
             }
-            if (string.IsNullOrEmpty(categoryID))
+            if (categoryID == "0")
             {
                 categoryID = "";
             }
-            if (string.IsNullOrEmpty(supplierID))
+            if (supplierID == "0")
             {
                 supplierID = "";
             }
@@ -47,7 +47,10 @@ namespace LiteCommerce.DataLayers.SqlServer
                                             AND ((@categoryID = N'') or (Products.CategoryID = @categoryID))
                                             AND ((@supplierID = N'') or (Products.SupplierID = @supplierID))
                                     ) as t
-                                    where t.RowNumber between @pageSize * (@page -  1) + 1 and @page * @pageSize";
+                                    where
+                                        (@pageSize = -1)
+                                        OR (t.RowNumber between @pageSize * (@page -  1) + 1 and @page * @pageSize)
+                                        order by t.RowNumber";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@page", page);
@@ -97,11 +100,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             {
                 searchValue = "%" + searchValue + "%";
             }
-            if (string.IsNullOrEmpty(categoryID))
+            if (categoryID == "0")
             {
                 categoryID = "";
             }
-            if (string.IsNullOrEmpty(supplierID))
+            if (supplierID == "0")
             {
                 supplierID = "";
             }

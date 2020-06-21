@@ -2,13 +2,15 @@
 @{
     ViewData["Title"] = "Products";
     ViewData["HeaderTitle"] = "Manage Products";
+    List<LiteCommerce.DomainModels.ProductAttribute> listAttribute = (List<LiteCommerce.DomainModels.ProductAttribute>)ViewData["listAttribute"];
+    int i = 0;
 }
 
 @functions {
     public string usePhotoPathOrDefault(string photoPath)
         {
             return string.IsNullOrEmpty(photoPath)
-                ? "/uploads/user.png"
+                ? "/images/no_image.jpg"
                 : "/uploads/" + photoPath;
         }
 }
@@ -43,6 +45,27 @@
         </div>
         <!-- /.tab-pane -->
         <div class="tab-pane" id="tab_2">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width:50px">#</th>
+                        <th style="width:auto">Attribute name</th>
+                        <th style="width:auto">Attribute value</th>
+                        <th style="width:100">Display order</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var attr in listAttribute)
+                    {
+                        <tr>
+                            <td>@(++i)</td>
+                            <td><p>@attr.AttributeName</p></td>
+                            <td><p>@attr.AttributeValues</p></td>
+                            <td><p>@attr.DisplayOrder</p></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
         <!-- /.tab-pane -->
     </div>

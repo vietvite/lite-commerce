@@ -52,6 +52,7 @@ namespace LiteCommerce.Controllers
         {
             try
             {
+                // Create Product
                 if (string.IsNullOrEmpty(id))
                 {
                     ViewData["HeaderTitle"] = "Create new product";
@@ -60,20 +61,22 @@ namespace LiteCommerce.Controllers
                         ProductID = 0
                     };
                     return View(newProduct);
-
                 }
                 else
                 {
+                    // Edit Product
                     ViewData["HeaderTitle"] = "Edit product";
                     Product editProduct = CatalogBLL.GetProduct(Convert.ToInt32(id));
-                    int rowCount = 0;
-                    List<LiteCommerce.DomainModels.Attribute> listOfAttribute =
-                        CatalogBLL.ListOfAttribute(Convert.ToString(editProduct.CategoryID), out rowCount);
+
                     if (editProduct == null)
                     {
                         return RedirectToAction("Index");
                     }
-                    ViewData["listAttribute"] = listOfAttribute;
+
+                    // Get list attributes of product for attribute tab
+                    List<ProductAttribute> listAttribute = CatalogBLL.ListOfAttribute(Convert.ToInt32(id));
+                    ViewData["listAttribute"] = listAttribute;
+
                     return View(editProduct);
                 }
             }
@@ -84,51 +87,99 @@ namespace LiteCommerce.Controllers
         }
 
         [HttpPost]
-        public IActionResult Input(ProductPostRequest model, string id = "")
+        public IActionResult Input(ProductPostRequest model, ProductAttribute attribute, List<ProductAttribute> lstAttribute, string id = "", string query = "")
+        {
+            if (query != null && query == "AddAttribute")
+            {
+                // Attribute POST
+                CatalogBLL.AddProductAttribute(attribute);
+                return RedirectToAction("Input", new { id = id });
+            }
+            else
+            {
+                // Product POST
+                try
+                {
+                    CheckNotNull(model);
+                    SetEmptyNullableField(model);
+
+                    string photoPath = UploadedFile(model);
+                    photoPath = string.IsNullOrEmpty(id)
+                        ? ""
+                        : string.IsNullOrEmpty(photoPath)
+                            ? CatalogBLL.GetProduct(Convert.ToInt32(id)).PhotoPath
+                            : photoPath;
+
+                    Product newProduct = new Product()
+                    {
+                        ProductID = model.ProductID,
+                        ProductName = model.ProductName,
+                        SupplierID = model.SupplierID,
+                        CategoryID = model.CategoryID,
+                        QuantityPerUnit = model.QuantityPerUnit,
+                        UnitPrice = model.UnitPrice,
+                        Descriptions = model.Descriptions,
+                        PhotoPath = photoPath
+                    };
+
+                    // Save data into DB
+                    if (newProduct.ProductID == 0)
+                    {
+                        CatalogBLL.AddProduct(newProduct);
+                    }
+                    else
+                    {
+                        CatalogBLL.UpdateProduct(newProduct);
+                    }
+                    return RedirectToAction("Index");
+                }
+                catch (MissingFieldException)
+                {
+                    return View(model);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message + ": " + ex.StackTrace);
+                    return View(model);
+                }
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Attribute(List<ProductAttribute> listAttribute, string id = "")
         {
             try
             {
-                CheckNotNull(model);
-                SetEmptyNullableField(model);
-
-                string photoPath = UploadedFile(model);
-                photoPath = string.IsNullOrEmpty(id)
-                    ? ""
-                    : string.IsNullOrEmpty(photoPath)
-                        ? CatalogBLL.GetProduct(Convert.ToInt32(id)).PhotoPath
-                        : photoPath;
-
-                Product newProduct = new Product()
-                {
-                    ProductID = model.ProductID,
-                    ProductName = model.ProductName,
-                    SupplierID = model.SupplierID,
-                    CategoryID = model.CategoryID,
-                    QuantityPerUnit = model.QuantityPerUnit,
-                    UnitPrice = model.UnitPrice,
-                    Descriptions = model.Descriptions,
-                    PhotoPath = photoPath
-                };
-
-                // Save data into DB
-                if (newProduct.ProductID == 0)
-                {
-                    CatalogBLL.AddProduct(newProduct);
-                }
-                else
-                {
-                    CatalogBLL.UpdateProduct(newProduct);
-                }
-                return RedirectToAction("Index");
+                CatalogBLL.UpdateProductAttribute(listAttribute);
+                return RedirectToAction("Input", new { id = id });
             }
             catch (MissingFieldException)
             {
-                return View(model);
+                return View();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message + ": " + ex.StackTrace);
-                return View(model);
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Attribute(string id = "", string attributeID = "")
+        {
+            try
+            {
+                CatalogBLL.DeleteProductAttributes(id, attributeID);
+                return RedirectToAction("Input", new { id = id });
+            }
+            catch (MissingFieldException)
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + ": " + ex.StackTrace);
+                return View();
             }
         }
 
@@ -151,9 +202,12 @@ namespace LiteCommerce.Controllers
                 ViewData["HeaderTitle"] = "Review product";
                 Product product = CatalogBLL.GetProduct(Convert.ToInt32(id));
                 if (product == null)
-                {
                     return RedirectToAction("Index");
-                }
+
+                // Get list attributes of product for attribute tab
+                List<ProductAttribute> listAttribute = CatalogBLL.ListOfAttribute(Convert.ToInt32(id));
+                ViewData["listAttribute"] = listAttribute;
+
                 return View(product);
             }
             catch (System.Exception ex)
