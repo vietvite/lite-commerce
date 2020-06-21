@@ -17,6 +17,10 @@ namespace LiteCommerce.DataLayers.SqlServer
         public List<Country> List(int page, int pageSize, string searchValue)
         {
             List<Country> listCountry = new List<Country>();
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                searchValue = "%" + searchValue + "%";
+            }
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -58,12 +62,16 @@ namespace LiteCommerce.DataLayers.SqlServer
         public int Count(string searchValue)
         {
             int count = 0;
-
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                searchValue = "%" + searchValue + "%";
+            }
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "select COUNT(*) from Country where @searchValue = N'' or CountryName like @searchValue";
+                cmd.CommandText = @"select COUNT(*) from Country where ((@searchValue = N'') or (CountryName like @searchValue))
+                                                                    or ((@searchValue = N'') or (CountryID like @searchValue))";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = connection;
                 cmd.Parameters.AddWithValue("@searchValue", searchValue);
@@ -107,7 +115,6 @@ namespace LiteCommerce.DataLayers.SqlServer
 
         public string Add(Country country)
         {
-            string countryId = "";
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
@@ -122,19 +129,25 @@ namespace LiteCommerce.DataLayers.SqlServer
                                     (
                                         @countryID,
                                         @countryName
-                                    );
-                                    SELECT @@IDENTITY;";
+                                    );";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = connection;
                 cmd.Parameters.AddWithValue("@countryID", country.CountryID);
                 cmd.Parameters.AddWithValue("@countryName", country.CountryName);
 
-                countryId = string.Format("{0}", cmd.ExecuteScalar());
 
+                int n = cmd.ExecuteNonQuery();
                 connection.Close();
-            }
 
-            return countryId;
+                if (n > 0)
+                {
+                    return country.CountryID;
+                }
+                else
+                {
+                    return "";
+                }
+            }
         }
 
         public bool Update(Country country)

@@ -17,6 +17,10 @@ namespace LiteCommerce.DataLayers.SqlServer
         public List<Category> List(int page, int pageSize, string searchValue)
         {
             List<Category> listCategory = new List<Category>();
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                searchValue = "%" + searchValue + "%";
+            }
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
