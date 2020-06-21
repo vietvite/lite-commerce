@@ -17,13 +17,26 @@ namespace LiteCommerce.DataLayers.SqlServer
         public List<Order> List(int page, int pageSize, string countryID, string categoryID, string employeeID, string shipperID)
         {
             List<Order> listOrder = new List<Order>();
+            if (categoryID == "0")
+                categoryID = "";
+            if (employeeID == "0")
+                employeeID = "";
+            if (shipperID == "0")
+                shipperID = "";
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = @"select * from (
-                                        select ROW_NUMBER() over(order by Orders.OrderID DESC) as RowNumber, 
-                                            Orders.*,
+                                        select DISTINCT Orders.OrderID,
+                                            DENSE_RANK() over(order by Orders.OrderID DESC) as RowNumber, 
+                                            Orders.OrderDate,
+                                            Orders.RequiredDate,
+                                            Orders.ShippedDate,
+                                            Orders.Freight,
+                                            Orders.ShipAddress,
+                                            Orders.ShipCity,
+                                            Orders.ShipCountry,
                                             Shippers.CompanyName as ShipperCompanyName,
                                             Customers.CompanyName as CustomerCompanyName,
                                             Employees.FirstName,
@@ -107,7 +120,7 @@ namespace LiteCommerce.DataLayers.SqlServer
             {
                 connection.Open();
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = @"select COUNT(*)
+                cmd.CommandText = @"select COUNT(DISTINCT Orders.OrderID)
                                         from Orders
                                             JOIN Shippers
                                                 ON Orders.ShipperID = Shippers.ShipperID
@@ -222,61 +235,123 @@ namespace LiteCommerce.DataLayers.SqlServer
             return listOrderDetails;
         }
 
-        public int Add(Order order)
+        public int Add(OrderDetails order)
         {
             int orderId = 0;
-            // using (SqlConnection connection = new SqlConnection(this.connectionString))
-            // {
-            //     connection.Open();
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            {
+                connection.Open();
 
-            //     SqlCommand cmd = new SqlCommand();
-            //     cmd.CommandText = @"INSERT INTO Orders
-            //                         (
-            //                             CategoryName,
-            //                             Description
-            //                         )
-            //                         VALUES
-            //                         (
-            //                             @CategoryName,
-            //                             @Description
-            //                         );
-            //                         SELECT @@IDENTITY;";
-            //     cmd.CommandType = CommandType.Text;
-            //     cmd.Connection = connection;
-            //     cmd.Parameters.AddWithValue("@CategoryID", order.CategoryID);
-            //     cmd.Parameters.AddWithValue("@CategoryName", order.CategoryName);
-            //     cmd.Parameters.AddWithValue("@Description", order.Description);
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = @"INSERT INTO Orders
+                                    (
+                                        OrderDate,
+                                        RequiredDate,
+                                        ShippedDate,
+                                        Freight,
+                                        ShipAddress,
+                                        ShipCity,
+                                        ShipCountry,
+                                        ShipperID,
+                                        CustomerID,
+                                        EmployeeID
+                                    )
+                                    VALUES
+                                    (
+                                        @OrderDate,
+                                        @RequiredDate,
+                                        @ShippedDate,
+                                        @Freight,
+                                        @ShipAddress,
+                                        @ShipCity,
+                                        @ShipCountry,
+                                        @ShipperID,
+                                        @CustomerID,
+                                        @EmployeeID
+                                    );
+                                    SELECT @@IDENTITY;";
+                cmd.CommandType = CommandType.Text;
+                cmd.Connection = connection;
+                cmd.Parameters.AddWithValue("@OrderDate", order.OrderDate);
+                cmd.Parameters.AddWithValue("@RequiredDate", order.RequiredDate);
+                cmd.Parameters.AddWithValue("@ShippedDate", order.ShippedDate);
+                cmd.Parameters.AddWithValue("@Freight", order.Freight);
+                cmd.Parameters.AddWithValue("@ShipAddress", order.ShipAddress);
+                cmd.Parameters.AddWithValue("@ShipCity", order.ShipCity);
+                cmd.Parameters.AddWithValue("@ShipCountry", order.ShipCountry);
+                cmd.Parameters.AddWithValue("@ShipperID", order.Shipper.ShipperID);
+                cmd.Parameters.AddWithValue("@CustomerID", order.Customer.CustomerID);
+                cmd.Parameters.AddWithValue("@EmployeeID", order.Employee.EmployeeID);
 
-            //     orderId = Convert.ToInt32(cmd.ExecuteScalar());
+                // Using last created OrderID of Order table to add data to OrderDetails table
+                orderId = Convert.ToInt32(cmd.ExecuteScalar());
+                cmd.CommandText = @"INSERT INTO OrderDetails
+                                    (
+                                        OrderID,
+                                        ProductID,
+                                        UnitPrice,
+                                        Quantity,
+                                        Discount
+                                    )
+                                    VALUES
+                                    (
+                                        @OrderID,
+                                        @ProductID,
+                                        @UnitPrice,
+                                        @Quantity,
+                                        @Discount
+                                    );";
 
-            //     connection.Close();
-            // }
+                cmd.Parameters.AddWithValue("@OrderID", orderId);
+                cmd.Parameters.AddWithValue("@ProductID", order.Product.ProductID);
+                cmd.Parameters.AddWithValue("@UnitPrice", order.UnitPrice);
+                cmd.Parameters.AddWithValue("@Quantity", order.Quantity);
+                cmd.Parameters.AddWithValue("@Discount", order.Discount);
+
+                cmd.ExecuteScalar();
+
+                connection.Close();
+            }
 
             return orderId;
         }
 
-        public bool Update(Order order)
+        public bool Update(OrderDetails order)
         {
             int rowsAffected = 0;
-            // using (SqlConnection connection = new SqlConnection(this.connectionString))
-            // {
-            //     connection.Open();
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            {
+                connection.Open();
 
-            //     SqlCommand cmd = new SqlCommand();
-            //     cmd.CommandText = @"UPDATE Orders
-            //                         SET CategoryName = @CategoryName
-            //                             ,Description = @Description
-            //                         WHERE CategoryID = @CategoryID";
-            //     cmd.CommandType = CommandType.Text;
-            //     cmd.Connection = connection;
-            //     cmd.Parameters.AddWithValue("@CategoryID", order.CategoryID);
-            //     cmd.Parameters.AddWithValue("@CategoryName", order.CategoryName);
-            //     cmd.Parameters.AddWithValue("@Description", order.Description);
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = @"INSERT INTO OrderDetails
+                                    (
+                                        OrderID,
+                                        ProductID,
+                                        UnitPrice,
+                                        Quantity,
+                                        Discount
+                                    )
+                                    VALUES
+                                    (
+                                        @OrderID,
+                                        @ProductID,
+                                        @UnitPrice,
+                                        @Quantity,
+                                        @Discount
+                                    );";
+                cmd.CommandType = CommandType.Text;
+                cmd.Connection = connection;
+                cmd.Parameters.AddWithValue("@OrderID", order.OrderID);
+                cmd.Parameters.AddWithValue("@ProductID", order.Product.ProductID);
+                cmd.Parameters.AddWithValue("@UnitPrice", order.UnitPrice);
+                cmd.Parameters.AddWithValue("@Quantity", order.Quantity);
+                cmd.Parameters.AddWithValue("@Discount", order.Discount);
 
-            //     rowsAffected = Convert.ToInt32(cmd.ExecuteNonQuery());
+                rowsAffected = Convert.ToInt32(cmd.ExecuteNonQuery());
 
-            //     connection.Close();
-            // }
+                connection.Close();
+            }
 
             return rowsAffected > 0;
         }

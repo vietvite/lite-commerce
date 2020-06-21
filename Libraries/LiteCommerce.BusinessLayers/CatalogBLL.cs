@@ -28,8 +28,8 @@ namespace LiteCommerce.BusinessLayers
             CategoryDB = new DataLayers.SqlServer.CategoryDAL(connectionString);
             ProductDB = new DataLayers.SqlServer.ProductDAL(connectionString);
             CountryDB = new DataLayers.SqlServer.CountryDAL(connectionString);
-            AttributeDB = new DataLayers.SqlServer.AttributeDAL(connectionString);
             OrderDB = new DataLayers.SqlServer.OrderDAL(connectionString);
+            ProductAttributeDB = new DataLayers.SqlServer.ProductAttributeDAL(connectionString);
         }
         private static ISupplierDAL SupplierDB { get; set; }
         private static ICustomerDAL CustomerDB { get; set; }
@@ -38,8 +38,8 @@ namespace LiteCommerce.BusinessLayers
         private static ICategoryDAL CategoryDB { get; set; }
         private static IProductDAL ProductDB { get; set; }
         private static ICountryDAL CountryDB { get; set; }
-        private static IAttributeDAL AttributeDB { get; set; }
         private static IOrderDAL OrderDB { get; set; }
+        private static IProductAttributeDAL ProductAttributeDB { get; set; }
 
         #endregion
 
@@ -48,8 +48,6 @@ namespace LiteCommerce.BusinessLayers
         {
             if (page < 1)
                 page = 1;
-            // if (pageSize < 0)
-            //     pageSize = 1;
             rowCount = SupplierDB.Count(searchValue);
             return SupplierDB.List(page, pageSize, searchValue);
         }
@@ -77,8 +75,6 @@ namespace LiteCommerce.BusinessLayers
         {
             if (page < 1)
                 page = 1;
-            if (pageSize < 0)
-                pageSize = 1;
             rowCount = CustomerDB.Count(searchValue, country);
             return CustomerDB.List(page, pageSize, searchValue, country);
         }
@@ -105,8 +101,6 @@ namespace LiteCommerce.BusinessLayers
         {
             if (page < 1)
                 page = 1;
-            // if (pageSize < 0)
-            //     pageSize = 1;
             rowCount = ShipperDB.Count(searchValue);
             return ShipperDB.List(page, pageSize, searchValue);
         }
@@ -133,8 +127,6 @@ namespace LiteCommerce.BusinessLayers
         {
             if (page < 1)
                 page = 1;
-            // if (pageSize < 0)
-            //     pageSize = 1;
             rowCount = EmployeeDB.Count(searchValue);
             return EmployeeDB.List(page, pageSize, searchValue);
         }
@@ -161,8 +153,6 @@ namespace LiteCommerce.BusinessLayers
         {
             if (page < 1)
                 page = 1;
-            // if (pageSize < 0)
-            //     pageSize = 1;
             rowCount = CategoryDB.Count(searchValue);
             return CategoryDB.List(page, pageSize, searchValue);
         }
@@ -189,8 +179,6 @@ namespace LiteCommerce.BusinessLayers
         {
             if (page < 1)
                 page = 1;
-            // if (pageSize < 0)
-            //     pageSize = 1;
             rowCount = ProductDB.Count(searchValue, category, supplier);
             return ProductDB.List(page, pageSize, searchValue, category, supplier);
         }
@@ -217,8 +205,6 @@ namespace LiteCommerce.BusinessLayers
         {
             if (page < 1)
                 page = 1;
-            // if (pageSize < 0)
-            //     pageSize = 1;
             rowCount = CountryDB.Count(searchValue);
             return CountryDB.List(page, pageSize, searchValue);
         }
@@ -240,30 +226,6 @@ namespace LiteCommerce.BusinessLayers
         }
         #endregion
 
-        #region Attribute
-        public static List<Attribute> ListOfAttribute(string categoryID, out int rowCount)
-        {
-            rowCount = AttributeDB.Count(categoryID);
-            return AttributeDB.List(categoryID);
-        }
-        public static Attribute GetAttribute(int attributeID)
-        {
-            return AttributeDB.Get(attributeID);
-        }
-        public static int AddAttribute(Attribute attribute)
-        {
-            return AttributeDB.Add(attribute);
-        }
-        public static bool UpdateAttribute(Attribute attribute)
-        {
-            return AttributeDB.Update(attribute);
-        }
-        public static int DeleteAttributes(int[] attributeIDs)
-        {
-            return AttributeDB.Delete(attributeIDs);
-        }
-        #endregion
-
         #region Order
         public static List<Order> ListOfOrder(
             int page,
@@ -282,17 +244,40 @@ namespace LiteCommerce.BusinessLayers
         {
             return OrderDB.Get(orderID);
         }
-        public static int AddOrder(Order order)
+        public static int AddOrder(OrderDetails order)
         {
             return OrderDB.Add(order);
         }
-        public static bool UpdateOrder(Order order)
+        public static bool UpdateOrder(OrderDetails order)
         {
             return OrderDB.Update(order);
         }
         public static int DeleteOrders(int[] orderIDs)
         {
             return OrderDB.Delete(orderIDs);
+        }
+        #endregion
+
+        #region ProductAttribute
+        public static List<ProductAttribute> ListOfAttribute(int ProductID)
+        {
+            return ProductAttributeDB.List(ProductID);
+        }
+        // public static List<OrderDetails> GetOrder(int orderID)
+        // {
+        //   return ProductAttributeDB.Get(orderID);
+        // }
+        public static int AddProductAttribute(ProductAttribute productAttribute)
+        {
+            return ProductAttributeDB.Add(productAttribute);
+        }
+        public static bool UpdateProductAttribute(List<ProductAttribute> listAttribute)
+        {
+            return ProductAttributeDB.Update(listAttribute);
+        }
+        public static int DeleteProductAttributes(string productID, string attributeID)
+        {
+            return ProductAttributeDB.Delete(productID, attributeID);
         }
         #endregion
 

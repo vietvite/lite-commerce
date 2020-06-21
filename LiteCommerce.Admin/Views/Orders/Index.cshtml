@@ -1,28 +1,10 @@
-﻿@model LiteCommerce.Models.OrderPaginationResult
+﻿@using Microsoft.AspNetCore.Html
+@model LiteCommerce.Models.OrderPaginationResult
 
 @{
     ViewData["Title"] = "Orders";
     ViewData["HeaderTitle"] = "Manage Orders";
     int i = (Model.Page - 1) * Model.PageSize;
-}
-
-@functions{
-    public string maybeSearchQuery(string SearchValue)
-    {
-        return SearchValue != ""
-            ? string.Format("&searchvalue={0}", SearchValue)
-            : "";
-    }
-    public string justPageQuery(int page)
-    {
-        return "page=" + page;
-    }
-    public string singularOrPluralWord(int count, string singularWord, string pluralWord)
-    {
-        return count > 1
-            ? pluralWord
-            : singularWord;
-    }
 }
 
 <div class="box box-primary">
@@ -104,11 +86,11 @@
 <form id="delete-selected" action="~/Orders/Delete" method="POST">
     <div class="container-fluid row" style="margin-bottom:10px;">
         <div class="col-sm-8">
-            There are <b>@Model.RowCount</b> @singularOrPluralWord(Model.RowCount, "order", "orders"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
+            There are <b>@Model.RowCount</b> @LiteCommerce.Common.ViewHelper.EitherSingularOrPluralWord(Model.RowCount, "order", "orders"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
         </div>
         <div class="col-md-4 text-right">
             <div class="btn-group">
-                <a href="~/Orders/Input" class="btn btn-sm btn-primary">Add Order</a>
+                <a href="~/Orders/New" class="btn btn-sm btn-primary">Add Order</a>
                 <button type="submit" class="btn btn-sm btn-danger">Delete Orders</button>
             </div>
         </div>
@@ -159,8 +141,8 @@
                                 <a class="btn btn-sm btn-default" href="~/Orders/Review/@order.OrderID/">
                                     <i class="fa fa-eye"></i>
                                 </a>
-                                <a class="btn btn-sm btn-default" href="~/Orders/New/@order.OrderID/">
-                                    <i class="fa fa-edit"></i>
+                                <a class="btn btn-sm btn-default" href="~/Orders/AddProduct/@order.OrderID/">
+                                    <i class="fa fa-plus"></i>
                                 </a>
                             </td>
                         </tr>
@@ -170,23 +152,7 @@
         </div>
         <div class="box-footer clearfix text-center">
             <ul class="pagination pagination-sm no-margin pull-right">
-                @if(Model.Page > 1) {
-                    <li><a href="~/Orders?@maybeSearchQuery(@Model.SearchValue)">«</a></li>
-                }
-                @for (int p = 1; p <= Model.PageCount; p++)
-                {
-                    if (p == Model.Page)
-                    {
-                        <li class="active"><a href="">@p</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="~/Orders?@justPageQuery(@p)@maybeSearchQuery(@Model.SearchValue)">@p</a></li>
-                    }
-                }
-                @if(Model.Page < Model.PageCount) {
-                    <li><a href="~/Orders?@justPageQuery(@Model.PageCount)@maybeSearchQuery(@Model.SearchValue)">»</a></li>
-                }
+                @LiteCommerce.Common.ViewHelper.RenderPageButton("Orders", Model.Page, Model.PageCount, 3, Model.SearchValue)
             </ul>
         </div>
     </div>

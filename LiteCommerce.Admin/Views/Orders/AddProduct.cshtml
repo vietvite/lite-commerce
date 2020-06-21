@@ -1,9 +1,25 @@
 ﻿@model List<LiteCommerce.DomainModels.OrderDetails>
-@using LiteCommerce.Common;
 @{
     ViewData["Title"] = "Orders";
     ViewData["HeaderTitle"] = "Manage Orders";
     int i = 0;
+}
+
+@functions {
+    public string usePhotoPathOrDefault(string photoPath)
+    {
+        return string.IsNullOrEmpty(photoPath)
+            ? "/uploads/user.png"
+            : "/uploads/" + photoPath;
+    }
+
+    Func<decimal, decimal, decimal> CalcDiscountPrice =
+        (UnitPrice, Discount) => UnitPrice - (UnitPrice * Discount);
+
+    Func<List<LiteCommerce.DomainModels.OrderDetails>, decimal> CalcTotalPrice =
+        list => list.Aggregate((decimal)0, (acc, product)
+            => acc += product.UnitPrice - (product.UnitPrice * product.Discount));
+
 }
 
 <div class="box box-primary">
@@ -35,10 +51,38 @@
 </div>
 <div class="box box-default color-palette-box">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-th-list"></i> Order Products</h3>
-        <span class="pull-right" style="font-size: 15px;font-weight: bolder;margin-right: 28px;">Total: @LiteCommerce.Common.ViewHelper.CalcTotalPrice(Model)</span>
+        <h3 class="box-title"><i class="fa fa-tag"></i> Order Products</h3>
+        <span class="pull-right" style="font-size: 15px;font-weight: bolder;margin-right: 28px;">Total: @CalcTotalPrice(Model)</span>
     </div>
     <div class="box-body">
+        <form action="~/Orders/AddProduct/@Model.First().OrderID" method="POST" role="form">
+            <div class="form-group row">
+                <div class="col-sm-5">
+                    <select class="form-control" name="ProductID">
+                        @foreach (var country in LiteCommerce.SelectListHelper.Products())
+                        {
+                            <option value="@country.Value">@country.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <input name="Quantity" value="" type="number" class="form-control" placeholder="Quantity">
+                </div>
+                <div class="col-sm-2">
+                    <input name="UnitPrice" type="number" value="" type="text" class="form-control" placeholder="Unit price">
+                </div>
+                <div class="col-sm-2">
+                    <input name="Discount" value="" type="number" class="form-control" placeholder="Discount">
+                </div>
+                <div class="col-sm-1">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-block btn-primary"><i class="fa fa-plus"></i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -61,7 +105,7 @@
                         <td><p>@product.Quantity</p></td>
                         <td><p>@product.UnitPrice</p></td>
                         <td><p>@product.Discount</p></td>
-                        <td><p>@LiteCommerce.Common.ViewHelper.CalcDiscountPrice(product.UnitPrice, product.Discount)</p></td>
+                        <td><p>@CalcDiscountPrice(product.UnitPrice, product.Discount)</p></td>
                     </tr>
                 }
             </tbody>

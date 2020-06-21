@@ -12,7 +12,7 @@ using LiteCommerce.BusinessLayers;
 
 namespace LiteCommerce.Controllers
 {
-    // [Authorize(Roles = WebUserRoles.DATA_MANAGER)]
+    [Authorize(Roles = WebUserRoles.SALEMAN)]
     public class OrdersController : Controller
     {
         private readonly ILogger<OrdersController> _logger;
@@ -24,7 +24,6 @@ namespace LiteCommerce.Controllers
 
         public IActionResult Index(
             int page = 1,
-            string searchValue = "",
             string country = "",
             string category = "",
             string employee = "",
@@ -33,7 +32,8 @@ namespace LiteCommerce.Controllers
         {
             int rowCount = 0;
             int pageSize = 10;
-            List<Order> listOfOrder = CatalogBLL.ListOfOrder(page, pageSize, out rowCount, country ?? "", category ?? "", employee ?? "", shipper ?? "");
+            List<Order> listOfOrder = CatalogBLL.ListOfOrder(page, pageSize, out rowCount,
+                country ?? "", category ?? "", employee ?? "", shipper ?? "");
 
             var model = new Models.OrderPaginationResult()
             {
@@ -80,25 +80,12 @@ namespace LiteCommerce.Controllers
         {
             try
             {
-                // if (string.IsNullOrEmpty(id))
-                // {
                 ViewData["HeaderTitle"] = "Create new order";
                 Order newOrder = new Order()
                 {
                     OrderID = 0
                 };
                 return View(newOrder);
-                // }
-                // else
-                // {
-                //     ViewData["HeaderTitle"] = "Edit order";
-                //     OrderDetails editOrder = CatalogBLL.GetOrder(Convert.ToInt32(id));
-                //     if (editOrder == null)
-                //     {
-                //         return RedirectToAction("Index");
-                //     }
-                //     return View(editOrder);
-                // }
             }
             catch (System.Exception ex)
             {
@@ -107,21 +94,51 @@ namespace LiteCommerce.Controllers
         }
 
         [HttpPost]
-        public IActionResult New(Order model)
+        public IActionResult New(OrderPostRequest model)
         {
             try
             {
                 // CheckNotNull(model);
                 // SetEmptyNullableField(model);
 
+                OrderDetails order = new OrderDetails()
+                {
+                    OrderID = model.OrderID,
+                    OrderDate = model.OrderDate,
+                    RequiredDate = model.RequiredDate,
+                    ShippedDate = model.ShippedDate,
+                    Freight = model.Freight,
+                    ShipAddress = model.ShipAddress,
+                    ShipCity = model.ShipCity,
+                    ShipCountry = model.ShipCountry,
+                    Shipper = new Shipper()
+                    {
+                        ShipperID = Convert.ToInt32(model.ShipperID),
+                    },
+                    Customer = new Customer()
+                    {
+                        CustomerID = model.CustomerID,
+                    },
+                    Employee = new Employee()
+                    {
+                        EmployeeID = Convert.ToInt32(model.EmployeeID),
+                    },
+                    Product = new Product()
+                    {
+                        ProductID = Convert.ToInt32(model.OrderProduct),
+                    },
+                    UnitPrice = model.UnitPrice,
+                    Quantity = model.Quantity,
+                    Discount = model.Discount,
+                };
                 // Save data into DB
                 if (model.OrderID == 0)
                 {
-                    CatalogBLL.AddOrder(model);
+                    CatalogBLL.AddOrder(order);
                 }
                 else
                 {
-                    CatalogBLL.UpdateOrder(model);
+                    CatalogBLL.UpdateOrder(order);
                 }
                 return RedirectToAction("Index");
             }
@@ -136,11 +153,73 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult AddProduct(string id = "")
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id))
+                    return RedirectToAction("Index");
+
+                List<OrderDetails> listOrderDetails = CatalogBLL.GetOrder(Convert.ToInt32(id));
+                if (listOrderDetails == null)
+                    return RedirectToAction("Index");
+
+                return View(listOrderDetails);
+            }
+            catch (System.Exception ex)
+            {
+                return Content(ex.Message + ": " + ex.StackTrace);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult AddProduct(OrderDetailPostRequest orderDetail, string id = "")
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id))
+                    return RedirectToAction("Index");
+
+                OrderDetails order = new OrderDetails()
+                {
+                    OrderID = Convert.ToInt32(id),
+                    Product = new Product()
+                    {
+                        ProductID = Convert.ToInt32(orderDetail.ProductID),
+                    },
+                    UnitPrice = orderDetail.UnitPrice,
+                    Quantity = orderDetail.Quantity,
+                    Discount = orderDetail.Discount,
+                };
+                bool ok = CatalogBLL.UpdateOrder(order);
+                if (ok)
+                    return RedirectToAction("AddProduct", new { id = id });
+
+                return RedirectToAction("Index");
+            }
+            catch (System.Exception ex)
+            {
+                return Content(ex.Message + ": " + ex.StackTrace);
+            }
+        }
+
         [HttpPost]
         public IActionResult Delete(int[] orderIDs)
         {
-            CatalogBLL.DeleteCategories(orderIDs);
+            // TODO: impl delete orders
+
+            // CatalogBLL.DeleteCategories(orderIDs);
             return RedirectToAction("Index");
+        }
+
+        public class OrderDetailPostRequest
+        {
+            // Order details
+            public decimal UnitPrice { get; set; }
+            public int Quantity { get; set; }
+            public decimal Discount { get; set; }
+            public string ProductID { get; set; }
         }
 
         // private void CheckNotNull(Order order)

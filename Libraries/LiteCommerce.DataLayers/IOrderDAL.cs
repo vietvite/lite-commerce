@@ -11,9 +11,9 @@ namespace LiteCommerce.DataLayers
 
         List<OrderDetails> Get(int orderID);
 
-        int Add(Order order);
+        int Add(OrderDetails order);
 
-        bool Update(Order order);
+        bool Update(OrderDetails order);
 
         int Delete(int[] orderIDs);
     }

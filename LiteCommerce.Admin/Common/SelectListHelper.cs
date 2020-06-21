@@ -32,7 +32,7 @@ namespace LiteCommerce
             List<SelectListItem> list = new List<SelectListItem>();
             if (allowSelectAll)
             {
-                list.Add(new SelectListItem() { Value = "", Text = "-- All categories --" });
+                list.Add(new SelectListItem() { Value = "0", Text = "-- All categories --" });
             }
             int rowCount = 0;
             List<Category> listCategories = CatalogBLL.ListOfCategory(1, -1, "", out rowCount);
@@ -56,7 +56,7 @@ namespace LiteCommerce
             List<SelectListItem> list = new List<SelectListItem>();
             if (allowSelectAll)
             {
-                list.Add(new SelectListItem() { Value = "", Text = "-- All suppliers --" });
+                list.Add(new SelectListItem() { Value = "0", Text = "-- All suppliers --" });
             }
             int rowCount = 0;
             List<Supplier> listSuppliers = CatalogBLL.ListOfSupplier(1, -1, "", out rowCount);
@@ -80,7 +80,7 @@ namespace LiteCommerce
             List<SelectListItem> list = new List<SelectListItem>();
             if (allowSelectAll)
             {
-                list.Add(new SelectListItem() { Value = "", Text = "-- All employees --" });
+                list.Add(new SelectListItem() { Value = "0", Text = "-- All employees --" });
             }
             int rowCount = 0;
             List<Employee> listEmployees = CatalogBLL.ListOfEmployee(1, -1, "", out rowCount);
@@ -104,7 +104,7 @@ namespace LiteCommerce
             List<SelectListItem> list = new List<SelectListItem>();
             if (allowSelectAll)
             {
-                list.Add(new SelectListItem() { Value = "", Text = "-- All shippers --" });
+                list.Add(new SelectListItem() { Value = "0", Text = "-- All shippers --" });
             }
             int rowCount = 0;
             List<Shipper> listShippers = CatalogBLL.ListOfShipper(1, -1, "", out rowCount);
@@ -116,6 +116,57 @@ namespace LiteCommerce
                     {
                         Value = string.Format("{0}", shipper.ShipperID),
                         Text = shipper.CompanyName,
+                    });
+                }
+            }
+
+            return list;
+        }
+
+        public static List<SelectListItem> Customers(bool allowSelectAll = true)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (allowSelectAll)
+            {
+                list.Add(new SelectListItem() { Value = "0", Text = "-- All customers --" });
+            }
+            int rowCount = 0;
+            string country = "";
+            List<Customer> listCustomers = CatalogBLL.ListOfCustomer(1, -1, "", out rowCount, country);
+            if (listCustomers != null)
+            {
+                foreach (var customer in listCustomers)
+                {
+                    list.Add(new SelectListItem()
+                    {
+                        Value = string.Format("{0}", customer.CustomerID),
+                        Text = customer.CompanyName,
+                    });
+                }
+            }
+
+            return list;
+        }
+
+        public static List<SelectListItem> Products(bool allowSelectAll = true)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (allowSelectAll)
+            {
+                list.Add(new SelectListItem() { Value = "0", Text = "-- All products --" });
+            }
+            int rowCount = 0;
+            string category = "";
+            string supplier = "";
+            List<Product> listProducts = CatalogBLL.ListOfProduct(1, -1, "", out rowCount, category, supplier);
+            if (listProducts != null)
+            {
+                foreach (var product in listProducts)
+                {
+                    list.Add(new SelectListItem()
+                    {
+                        Value = string.Format("{0}", product.ProductID),
+                        Text = product.ProductName,
                     });
                 }
             }
