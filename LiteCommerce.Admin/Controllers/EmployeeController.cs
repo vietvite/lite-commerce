@@ -11,6 +11,7 @@ using LiteCommerce.DomainModels;
 using LiteCommerce.BusinessLayers;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using LiteCommerce.Services;
 
 namespace LiteCommerce.Controllers
 {
@@ -19,11 +20,13 @@ namespace LiteCommerce.Controllers
     {
         private readonly ILogger<EmployeeController> _logger;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public EmployeeController(ILogger<EmployeeController> logger, IWebHostEnvironment hostingEnvironment)
+        public EmployeeController(ILogger<EmployeeController> logger, IWebHostEnvironment hostingEnvironment, IPasswordHasher passwordHasher)
         {
             _logger = logger;
             _hostingEnvironment = hostingEnvironment;
+            _passwordHasher = passwordHasher;
         }
 
         public IActionResult Index(int page = 1, string searchValue = "")
@@ -141,6 +144,10 @@ namespace LiteCommerce.Controllers
                 // TODO: Save input into DB
                 if (model.EmployeeID == 0)
                 {
+                    // Set default password & role for new employee
+                    employee.Password = _passwordHasher.Hash("12345");
+                    employee.Roles = WebUserRoles.SALEMAN;
+
                     CatalogBLL.AddEmployee(employee);
                 }
                 else
