@@ -34,17 +34,9 @@
                 <div class="col-sm-6">
                     <label>Country:</label>
                     <select class="form-control" name="Country">
-                        @if(string.IsNullOrEmpty(Model.Country)) {
-                            <option value="" selected>-- Select Country --</option>
-                        }else {
-                            @foreach (var country in LiteCommerce.SelectListHelper.Countries())
-                            {
-                                if(Model.Country == country.Value) {
-                                    <option value="@country.Value" selected>@country.Text</option>
-                                } else {
-                                    <option value="@country.Value">@country.Text</option>
-                                }
-                            }
+                        @foreach (var country in LiteCommerce.SelectListHelper.Countries())
+                        {
+                            <option value="@country.Value">@country.Text</option>
                         }
                     </select>
                 </div>
@@ -88,7 +80,7 @@
             <button type="submit" class="btn btn-sm btn-primary">
                 <i class="fa fa-save"></i> Save
             </button>
-            <a class="btn btn-sm btn-default" href="~/Supplier">
+            <a class="btn btn-sm btn-default" href="~/Suppliers">
                 Cancel
             </a>
         </div>
