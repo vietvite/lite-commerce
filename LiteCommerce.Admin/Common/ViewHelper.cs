@@ -4,7 +4,6 @@ using System.Linq;
 using LiteCommerce.DomainModels;
 using Microsoft.AspNetCore.Html;
 
-
 namespace LiteCommerce.Common
 {
     public static class ViewHelper
@@ -30,7 +29,10 @@ namespace LiteCommerce.Common
                 ? "/uploads/user.png"
                 : $"/uploads/{PhotoPath}";
 
+        public static Func<int, string> MaybeID = id => id != 0 ? $"{id}" : "";
+
         #endregion
+
 
         #region Paginate button
         public static Func<string, int, string, string, IHtmlContent> RenderButton =
