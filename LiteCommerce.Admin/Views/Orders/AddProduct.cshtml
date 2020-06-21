@@ -5,23 +5,6 @@
     int i = 0;
 }
 
-@functions {
-    public string usePhotoPathOrDefault(string photoPath)
-    {
-        return string.IsNullOrEmpty(photoPath)
-            ? "/uploads/user.png"
-            : "/uploads/" + photoPath;
-    }
-
-    Func<decimal, decimal, decimal> CalcDiscountPrice =
-        (UnitPrice, Discount) => UnitPrice - (UnitPrice * Discount);
-
-    Func<List<LiteCommerce.DomainModels.OrderDetails>, decimal> CalcTotalPrice =
-        list => list.Aggregate((decimal)0, (acc, product)
-            => acc += product.UnitPrice - (product.UnitPrice * product.Discount));
-
-}
-
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fa fa-tag"></i> Order Info</h3>
@@ -52,7 +35,7 @@
 <div class="box box-default color-palette-box">
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fa fa-tag"></i> Order Products</h3>
-        <span class="pull-right" style="font-size: 15px;font-weight: bolder;margin-right: 28px;">Total: @CalcTotalPrice(Model)</span>
+        <span class="pull-right" style="font-size: 15px;font-weight: bolder;margin-right: 28px;">Total: @LiteCommerce.Common.ViewHelper.CalcTotalPrice(Model)</span>
     </div>
     <div class="box-body">
         <form action="~/Orders/AddProduct/@Model.First().OrderID" method="POST" role="form">
@@ -105,7 +88,7 @@
                         <td><p>@product.Quantity</p></td>
                         <td><p>@product.UnitPrice</p></td>
                         <td><p>@product.Discount</p></td>
-                        <td><p>@CalcDiscountPrice(product.UnitPrice, product.Discount)</p></td>
+                        <td><p>@LiteCommerce.Common.ViewHelper.CalcDiscountPrice(product.UnitPrice, product.Discount)</p></td>
                     </tr>
                 }
             </tbody>

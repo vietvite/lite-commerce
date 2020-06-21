@@ -3,23 +3,8 @@
     ViewData["HeaderTitle"] = ViewData["HeaderTitle"] ?? TempData["HeaderTitle"];
 }
 
-@functions {
-    public string usePhotoPathOrDefault(string photoPath)
-    {
-        return string.IsNullOrEmpty(photoPath)
-            ? "/uploads/user.png"
-            : "/uploads/" + photoPath;
-    }
-    public string MaybeId(int id)
-    {
-        return id != 0
-            ? ""+id
-            : "";
-    }
-}
-
 <div class="box box-primary">
-    <form enctype="multipart/form-data" action="~/Employee/Input/@MaybeId(@Model.EmployeeID)" method="POST" role="form">
+    <form enctype="multipart/form-data" action="~/Employee/Input/@LiteCommerce.Common.ViewHelper.MaybeID(@Model.EmployeeID)" method="POST" role="form">
         <div class="box-header text-right">
             <a href="~/Employee">Back to List</a>
         </div>
@@ -59,7 +44,7 @@
                     </div>
                 </div>
                 <div class="col-sm-3">
-                    <img id="avatar" class="img-thumbnail" src="@usePhotoPathOrDefault(@Model.PhotoPath)" alt="user">
+                    <img id="avatar" class="img-thumbnail" src="@LiteCommerce.Common.ViewHelper.EitherPhotoPathOrDefault(@Model.PhotoPath)" alt="user">
                     <input id="PhotoPath_file" type="file" name="PhotoPath" value="@Model.PhotoPath" style="display: none;">
                 </div>
             </div>

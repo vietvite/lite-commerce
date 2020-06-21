@@ -6,15 +6,6 @@
     int i = 0;
 }
 
-@functions {
-    public string usePhotoPathOrDefault(string photoPath)
-        {
-            return string.IsNullOrEmpty(photoPath)
-                ? "/images/no_image.jpg"
-                : "/uploads/" + photoPath;
-        }
-}
-
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab">Product</a></li>
@@ -39,7 +30,7 @@
                     <p><b>Descriptions: </b>@Model.Descriptions</p>
                 </div>
                 <div class="col-sm-3">
-                    <img id="avatar" class="img-thumbnail" src="@usePhotoPathOrDefault(@Model.PhotoPath)" alt="user">
+                    <img id="avatar" class="img-thumbnail" src="@LiteCommerce.Common.ViewHelper.EitherPhotoPathOrDefault(@Model.PhotoPath)" alt="user">
                 </div>
             </div>
         </div>

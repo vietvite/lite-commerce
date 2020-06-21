@@ -6,25 +6,6 @@
     int i = (Model.Page - 1) * Model.PageSize;
 }
 
-@functions{
-    public string maybeSearchQuery(string SearchValue)
-    {
-        return SearchValue != ""
-            ? string.Format("&searchvalue={0}", SearchValue)
-            : "";
-    }
-    public string justPageQuery(int page)
-    {
-        return "page=" + page;
-    }
-    public string singularOrPluralWord(int count, string singularWord, string pluralWord)
-    {
-        return count > 1
-            ? pluralWord
-            : singularWord;
-    }
-}
-
 <div class="box box-primary">
     <div class="box-body">
         <form action="~/Customer" method="GET" >
@@ -41,7 +22,7 @@
                     <div class="input-group">
                         @* @Html.TextBox("SearchValue",
                             new { @type="text", @class="form-control", @placehoder="Input search value..."}) *@
-                        <input name="searchValue" value="@Model.SearchValue" type="text" class="form-control" placeholder="Input search value...">
+                        <input name="searchValue" value="@Model.SearchValue" type="text" class="form-control" placeholder="Search company name">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-primary btn-flat">
                                 <i class="fa fa-search"></i>
@@ -57,7 +38,7 @@
 <form id="delete-selected" action="~/Customer/Delete" method="POST">
     <div class="container-fluid row" style="margin-bottom:10px;">
         <div class="col-sm-8">
-            There are <b>@Model.RowCount</b> @singularOrPluralWord(Model.RowCount, "customer", "customers"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
+            There are <b>@Model.RowCount</b> @LiteCommerce.Common.ViewHelper.EitherSingularOrPluralWord(Model.RowCount, "customer", "customers"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
         </div>
         <div class="col-md-4 text-right">
             <div class="btn-group">
@@ -115,23 +96,7 @@
         </div>
         <div class="box-footer clearfix text-center">
             <ul class="pagination pagination-sm no-margin pull-right">
-                @if(Model.Page > 1) {
-                    <li><a href="~/Customer?@maybeSearchQuery(@Model.SearchValue)">«</a></li>
-                }
-                @for (int p = 1; p <= Model.PageCount; p++)
-                {
-                    if (p == Model.Page)
-                    {
-                        <li class="active"><a href="">@p</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="~/Customer?@justPageQuery(@p)@maybeSearchQuery(@Model.SearchValue)">@p</a></li>
-                    }
-                }
-                @if(Model.Page < Model.PageCount) {
-                    <li><a href="~/Customer?@justPageQuery(@Model.PageCount)@maybeSearchQuery(@Model.SearchValue)">»</a></li>
-                }
+                @LiteCommerce.Common.ViewHelper.RenderPageButton("Customer", Model.Page, Model.PageCount, 3, Model.SearchValue)
             </ul>
         </div>
     </div>

@@ -7,12 +7,6 @@
 }
 
 @functions{
-    public string maybeSearchQuery(string SearchValue)
-    {
-        return !string.IsNullOrEmpty(SearchValue)
-            ? string.Format("&searchvalue={0}", SearchValue)
-            : "";
-    }
     public string maybeSupplierQuery(string supplier)
     {
         return !string.IsNullOrEmpty(supplier)
@@ -100,7 +94,7 @@
 <form id="delete-selected" action="~/Product/Delete" method="POST">
     <div class="container-fluid row" style="margin-bottom:10px;">
         <div class="col-sm-8">
-            There are <b>@Model.RowCount</b> @singularOrPluralWord(Model.RowCount, "product", "products"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
+            There are <b>@Model.RowCount</b> @LiteCommerce.Common.ViewHelper.EitherSingularOrPluralWord(Model.RowCount, "product", "products"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
         </div>
         <div class="col-md-4 text-right">
             <div class="btn-group">
@@ -156,23 +150,7 @@
         </div>
         <div class="box-footer clearfix text-center">
             <ul class="pagination pagination-sm no-margin pull-right">
-                @if(Model.Page > 1) {
-                    <li><a href="~/Product?@maybeSearchQuery(@Model.SearchValue)@maybeCategoryQuery(Model.SelectedCategory)@maybeSupplierQuery(Model.SelectedSupplier)">«</a></li>
-                }
-                @for (int p = 1; p <= Model.PageCount; p++)
-                {
-                    if (p == Model.Page)
-                    {
-                        <li class="active"><a href="">@p</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="~/Product?@justPageQuery(@p)@maybeSearchQuery(@Model.SearchValue)@maybeCategoryQuery(Model.SelectedCategory)@maybeSupplierQuery(Model.SelectedSupplier)">@p</a></li>
-                    }
-                }
-                @if(Model.Page < Model.PageCount) {
-                    <li><a href="~/Product?@justPageQuery(@Model.PageCount)@maybeSearchQuery(@Model.SearchValue)@maybeCategoryQuery(Model.SelectedCategory)@maybeSupplierQuery(Model.SelectedSupplier)">»</a></li>
-                }
+                @LiteCommerce.Common.ViewHelper.RenderPageButton("Product", Model.Page, Model.PageCount, 3, Model.SearchValue)
             </ul>
         </div>
     </div>

@@ -6,22 +6,6 @@
     int i = (Model.Page - 1) * Model.PageSize;
 }
 
-@functions{
-    public string maybeSearchQuery(string SearchValue) {
-        return SearchValue != "" 
-            ? string.Format("&searchvalue={0}", SearchValue)
-            : "";
-    }
-    public string justPageQuery(int page) {
-        return "page=" + page;
-    }
-    public string singularOrPluralWord(int count, string singularWord, string pluralWord) {
-        return count > 1
-            ? pluralWord
-            : singularWord;
-    }
-}
-
 <div class="box box-primary">
     <div class="box-body">
         <form action="~/Countries" method="GET" >
@@ -39,7 +23,7 @@
 <form id="delete-selected" action="~/Countries/Delete" method="POST">
     <div class="container-fluid row" style="margin-bottom:10px;">
         <div class="col-sm-8">
-            There are <b>@Model.RowCount</b> @singularOrPluralWord(Model.RowCount, "country", "countries"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
+            There are <b>@Model.RowCount</b> @LiteCommerce.Common.ViewHelper.EitherSingularOrPluralWord(Model.RowCount, "country", "countries"). Page <b>@string.Format("{0}/{1}", Model.Page, Model.PageCount)</b>
         </div>
         <div class="col-md-4 text-right">
             <div class="btn-group">
@@ -88,23 +72,7 @@
         </div>
         <div class="box-footer clearfix text-center">
             <ul class="pagination pagination-sm no-margin pull-right">
-                @if(Model.Page > 1) {
-                    <li><a href="~/Countries?@maybeSearchQuery(@Model.SearchValue)">«</a></li>
-                }
-                @for (int p = 1; p <= Model.PageCount; p++)
-                {
-                    if (p == Model.Page)
-                    {
-                        <li class="active"><a href="#">@p</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="~/Countries?@justPageQuery(@p)@maybeSearchQuery(@Model.SearchValue)">@p</a></li>
-                    }
-                }
-                @if(Model.Page < Model.PageCount) {
-                    <li><a href="~/Countries?@justPageQuery(@Model.PageCount)@maybeSearchQuery(@Model.SearchValue)">»</a></li>
-                }
+                @LiteCommerce.Common.ViewHelper.RenderPageButton("Countries", Model.Page, Model.PageCount, 3, Model.SearchValue)
             </ul>
         </div>
     </div>
