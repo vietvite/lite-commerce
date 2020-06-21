@@ -35,10 +35,64 @@ namespace LiteCommerce.Controllers
             return View();
         }
 
-        // [Authorize(Roles = "Employee")]
+        [HttpGet]
         public IActionResult ChangePassword()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult ChangePassword(PasswordPostRequest password)
+        {
+            try
+            {
+                Employee employee = null;
+                ValidatePassword(password, out employee);
+
+                // Update new password
+                employee.Password = _passwordHasher.Hash(password.NewPassword);
+                CatalogBLL.UpdateEmployee(employee);
+
+                return RedirectToAction("Index", "Dashboard");
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.Message + ":\n" + ex.StackTrace);
+                ViewData["OldPassword"] = password.OldPassword;
+                ViewData["NewPassword"] = password.NewPassword;
+                ViewData["ReNewPassword"] = password.ReNewPassword;
+                return View();
+            }
+        }
+
+        public class PasswordPostRequest
+        {
+            public string OldPassword { get; set; }
+            public string NewPassword { get; set; }
+            public string ReNewPassword { get; set; }
+        }
+
+        public void ValidatePassword(PasswordPostRequest password, out Employee outEmployee)
+        {
+            if (string.IsNullOrEmpty(password.OldPassword))
+                ModelState.AddModelError("OldPassword", "Please type old password.");
+            if (string.IsNullOrEmpty(password.NewPassword))
+                ModelState.AddModelError("NewPassword", "Please type new password.");
+            if (string.IsNullOrEmpty(password.ReNewPassword))
+                ModelState.AddModelError("ReNewPassword", "Please retype new password.");
+
+            if (password.NewPassword != password.ReNewPassword)
+                ModelState.AddModelError("Error", "Retype new password not match.");
+
+            // Get old password & compare two hashed
+            string oldPasswordHashed = _passwordHasher.Hash(password.OldPassword);
+            outEmployee = CatalogBLL.GetEmployee(Convert.ToInt32(User.FindFirst("UserID").Value));
+
+            if (outEmployee.Password != oldPasswordHashed)
+                ModelState.AddModelError("Error", "Old password not correct.");
+
+            if (ModelState.ErrorCount > 0)
+                throw new Exception();
         }
 
         [AllowAnonymous]
@@ -54,23 +108,15 @@ namespace LiteCommerce.Controllers
         [HttpPost]
         public async Task<IActionResult> LogIn(string email = "", string password = "")
         {
-            string hashedPassword = _passwordHasher.Hash(password);
-            _logger.LogWarning("Hashed password: " + hashedPassword);
-            UserAccount user = UserAccountBLL.Authenticate(email, hashedPassword, UserAccountTypes.Employee);
-            if (user != null)
+            try
             {
-                // WebUserData userData = new WebUserData() {
-                //     UserID = user.UserID,
-                //     FullName = user.Fullname,
-                //     GroupName = "Employee",
-                //     LoginTime = Datetime.Now,
-                //     SessionID = Session.SessionID,
-                //     ClientIP = Request.UserHostAddress,
-                //     Photo = user.Photo,
-                // }
-                // FormsAuthentication.SetAuthCookie(userData.ToCookieString(), false);
+                CheckNotNull(email, password);
+                string hashedPassword = _passwordHasher.Hash(password);
+                UserAccount user = UserAccountBLL.Authenticate(email, hashedPassword, UserAccountTypes.Employee);
 
-                // string SessionId = _contextAccessor.HttpContext.Session.Id;
+                if (user == null)
+                    throw new Exception("Email or password is not valid.");
+
                 var claims = new List<Claim>
                 {
                     new Claim("UserID", user.UserID),
@@ -82,16 +128,23 @@ namespace LiteCommerce.Controllers
                     new Claim("Photo", user.Photo),
                     new Claim("Title", user.Title),
                 };
-
                 await HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "UserInfo")));
 
                 return RedirectToAction("Index", "Dashboard");
             }
-            else
+            catch (MissingFieldException)
             {
-                ModelState.AddModelError("LoginError", "Login Fail");
-                ViewBag.email = email;
-                ViewBag.password = password;
+                ViewData["email"] = email ?? "";
+                ViewData["password"] = password ?? "";
+
+                return View();
+            }
+            catch (System.Exception ex)
+            {
+                ViewData["email"] = email ?? "";
+                ViewData["password"] = password ?? "";
+
+                ModelState.AddModelError("LoginError", ex.Message);
                 return View();
             }
         }
@@ -102,10 +155,18 @@ namespace LiteCommerce.Controllers
             return RedirectToAction("LogIn");
         }
 
-        private bool ValidateLogin(string userName, string password)
+        private void CheckNotNull(string email = "", string password = "")
         {
-            // For this sample, all logins are successful.
-            return true;
+            if (string.IsNullOrEmpty(email))
+                ModelState.AddModelError("LoginError", "Email expected");
+
+            if (string.IsNullOrEmpty(password))
+                ModelState.AddModelError("LoginError", "Password expected");
+
+            if (ModelState.ErrorCount > 0)
+            {
+                throw new MissingFieldException();
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

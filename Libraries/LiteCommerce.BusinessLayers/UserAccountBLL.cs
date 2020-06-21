@@ -31,5 +31,22 @@ namespace LiteCommerce.BusinessLayers
             }
             return userAccountDB.Authenticate(email, password);
         }
+
+        public static UserAccount GetAccount(string email, UserAccountTypes userTypes)
+        {
+            IUserAccountDAL userAccountDB;
+            switch (userTypes)
+            {
+                case UserAccountTypes.Employee:
+                    userAccountDB = new EmployeeUserAccountDAL(_connectionString);
+                    break;
+                case UserAccountTypes.Customer:
+                    userAccountDB = new CustomerUserAccountDAL(_connectionString);
+                    break;
+                default:
+                    return null;
+            }
+            return userAccountDB.GetAccount(email);
+        }
     }
 }

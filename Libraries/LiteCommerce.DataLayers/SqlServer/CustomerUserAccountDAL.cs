@@ -21,5 +21,16 @@ namespace LiteCommerce.DataLayers
             };
         }
 
+        public UserAccount GetAccount(string email)
+        {
+            // TODO: Validate login rely on `Customers` tables
+            return new UserAccount()
+            {
+                UserID = "asd",
+                Fullname = "Van Viet",
+                Photo = "asd.jpg"
+            };
+        }
+
     }
 }

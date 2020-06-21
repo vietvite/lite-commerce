@@ -123,6 +123,7 @@ namespace LiteCommerce.DataLayers.SqlServer
                             HomePhone = Convert.ToString(dbReader["HomePhone"]),
                             Notes = Convert.ToString(dbReader["Notes"]),
                             PhotoPath = Convert.ToString(dbReader["PhotoPath"]),
+                            Password = Convert.ToString(dbReader["Password"]),
                         };
                     }
                 }
@@ -153,6 +154,8 @@ namespace LiteCommerce.DataLayers.SqlServer
                                         Country,
                                         HomePhone,
                                         Notes,
+                                        Roles,
+                                        Password,
                                         PhotoPath
                                     )
                                     VALUES
@@ -168,6 +171,8 @@ namespace LiteCommerce.DataLayers.SqlServer
                                         @Country,
                                         @HomePhone,
                                         @Notes,
+                                        @Roles,
+                                        @Password,
                                         @PhotoPath
                                     );
                                     SELECT @@IDENTITY;";
@@ -184,6 +189,8 @@ namespace LiteCommerce.DataLayers.SqlServer
                 cmd.Parameters.AddWithValue("@Country", employee.Country);
                 cmd.Parameters.AddWithValue("@HomePhone", employee.HomePhone);
                 cmd.Parameters.AddWithValue("@Notes", employee.Notes);
+                cmd.Parameters.AddWithValue("@Roles", employee.Roles);
+                cmd.Parameters.AddWithValue("@Password", employee.Password);
                 cmd.Parameters.AddWithValue("@PhotoPath", employee.PhotoPath);
 
                 employeeID = Convert.ToInt32(cmd.ExecuteScalar());
@@ -204,17 +211,17 @@ namespace LiteCommerce.DataLayers.SqlServer
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = @"UPDATE Employees
                                     SET LastName = @LastName
-                                        ,FirstName = @FirstName
-                                        ,Title = @Title
-                                        ,BirthDate = @BirthDate
-                                        ,HireDate = @HireDate
-                                        ,Email = @Email
-                                        ,Address = @Address
-                                        ,City = @City
-                                        ,Country = @Country
-                                        ,HomePhone = @HomePhone
-                                        ,Notes = @Notes
-                                        ,PhotoPath = @PhotoPath
+                                    ,   FirstName = @FirstName
+                                    ,   Title = @Title
+                                    ,   BirthDate = @BirthDate
+                                    ,   HireDate = @HireDate
+                                    ,   Email = @Email
+                                    ,   Address = @Address
+                                    ,   City = @City
+                                    ,   Country = @Country
+                                    ,   HomePhone = @HomePhone
+                                    ,   Notes = @Notes
+                                    ,   PhotoPath = @PhotoPath
                                     WHERE EmployeeID = @EmployeeID";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = connection;

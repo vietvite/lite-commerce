@@ -12,5 +12,6 @@ namespace LiteCommerce.DataLayers
         /// <param name="password"></param>
         /// <returns>UserAccount|null</returns>
         UserAccount Authenticate(string email, string password);
+        UserAccount GetAccount(string email);
     }
 }
