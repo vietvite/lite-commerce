@@ -32,7 +32,9 @@ namespace LiteCommerce.DataLayers.SqlServer
                                             AND 
                                             ((@country = N'') or (Country = @country))
                                     ) as t
-                                    where t.RowNumber between @pageSize * (@page -  1) + 1 and @page * @pageSize";
+                                    where (@pageSize = -1)
+                                        OR (t.RowNumber between @pageSize * (@page -  1) + 1 and @page * @pageSize)
+                                        order by t.RowNumber";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = conn;
                 cmd.Parameters.AddWithValue("@page", page);
