@@ -1,7 +1,9 @@
-﻿using System;
+﻿using System.Data;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -93,6 +95,9 @@ namespace LiteCommerce.Controllers
             catch (System.Exception ex)
             {
                 _logger.LogError(ex.Message + ": " + ex.StackTrace);
+                if (ex.Message.Contains("The duplicate key value is"))
+                    ModelState.AddModelError("CountryID", model.CountryID + " is already existed.");
+
                 return View(model);
             }
         }
