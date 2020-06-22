@@ -99,8 +99,10 @@ namespace LiteCommerce.Controllers
         [HttpGet]
         public IActionResult LogIn()
         {
-            //TODO: Check whether user is logged in yet, if true redirect to dashboard
-            return View();
+            if (string.IsNullOrEmpty(User.FindFirst("UserID").Value))
+                return View();
+
+            return RedirectToAction("Index", "Dashboard");
         }
 
         [AllowAnonymous]
@@ -123,7 +125,6 @@ namespace LiteCommerce.Controllers
                     new Claim("FullName", user.Fullname),
                     new Claim(ClaimTypes.Role, user.Groupname),
                     new Claim("LoginTime", Convert.ToString(DateTime.Now)),
-                    // new Claim("SessionID", _contextAccessor.HttpContext.Session.Id),
                     new Claim("ClientIP", _contextAccessor.HttpContext.Connection.RemoteIpAddress.ToString()),
                     new Claim("Photo", user.Photo),
                     new Claim("Title", user.Title),
