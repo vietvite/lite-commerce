@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Country";
+    string CountryID = (string)ViewData["CountryID"] ?? Model.CountryID;
+    string CountryName = (string)ViewData["CountryName"] ?? Model.CountryName;
 }
 
 <div class="box box-primary">
@@ -13,12 +15,12 @@
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label>Country ID:</label>
-                    <input name="CountryID" value="@Model.CountryID" type="text" class="form-control" placeholder="Enter Country ID">
+                    <input name="CountryID" value="@CountryID" type="text" class="form-control" placeholder="Enter Country ID">
                     @Html.ValidationMessage("CountryID", new { @class="help-block" })
                 </div>
                 <div class="form-group col-sm-6">
                     <label>Country Name:</label>
-                    <input name="CountryName" value="@Model.CountryName" type="text" class="form-control" placeholder="Country Name">
+                    <input name="CountryName" value="@CountryName" type="text" class="form-control" placeholder="Country Name">
                     @Html.ValidationMessage("CountryName", new { @class="help-block" })
                 </div>
             </div>

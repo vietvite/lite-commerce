@@ -77,20 +77,18 @@ namespace LiteCommerce.Controllers
             {
                 CheckNotNull(model);
 
-                // Save data into DB
                 if (string.IsNullOrEmpty(id))
-                {
                     CatalogBLL.AddCountry(model);
-                }
                 else
-                {
                     CatalogBLL.UpdateCountry(model);
-                }
+
                 return RedirectToAction("Index");
             }
             catch (MissingFieldException)
             {
-                return View(model);
+                ViewData["CountryID"] = model.CountryID;
+                ViewData["CountryName"] = model.CountryName;
+                return View(new Country());
             }
             catch (System.Exception ex)
             {
@@ -98,7 +96,9 @@ namespace LiteCommerce.Controllers
                 if (ex.Message.Contains("The duplicate key value is"))
                     ModelState.AddModelError("CountryID", model.CountryID + " is already existed.");
 
-                return View(model);
+                ViewData["CountryID"] = model.CountryID;
+                ViewData["CountryName"] = model.CountryName;
+                return View(new Country());
             }
         }
 
