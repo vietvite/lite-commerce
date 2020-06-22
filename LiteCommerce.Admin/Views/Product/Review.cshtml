@@ -30,7 +30,7 @@
                     <p><b>Descriptions: </b>@Model.Descriptions</p>
                 </div>
                 <div class="col-sm-3">
-                    <img id="avatar" class="img-thumbnail" src="@LiteCommerce.Common.ViewHelper.EitherPhotoPathOrDefault(@Model.PhotoPath)" alt="user">
+                    <img id="avatar" class="img-thumbnail" src="@LiteCommerce.Common.ViewHelper.EitherPhotoPathOrDefault(@Model.PhotoPath, LiteCommerce.Common.Constants.NoImagePath)" alt="user">
                 </div>
             </div>
         </div>

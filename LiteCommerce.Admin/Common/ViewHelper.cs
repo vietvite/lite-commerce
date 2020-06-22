@@ -24,9 +24,9 @@ namespace LiteCommerce.Common
             list => list.Aggregate((decimal)0, (acc, product)
                 => acc += product.UnitPrice - (product.UnitPrice * product.Discount));
 
-        public static Func<string, string> EitherPhotoPathOrDefault =
-            (PhotoPath) => string.IsNullOrEmpty(PhotoPath)
-                ? "/uploads/user.png"
+        public static Func<string, string, string> EitherPhotoPathOrDefault =
+            (PhotoPath, DefaultPath) => string.IsNullOrEmpty(PhotoPath)
+                ? DefaultPath
                 : $"/uploads/{PhotoPath}";
 
         public static Func<int, string> MaybeID = id => id != 0 ? $"{id}" : "";
