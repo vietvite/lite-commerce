@@ -59,9 +59,8 @@ namespace LiteCommerce.Controllers
                     ViewData["HeaderTitle"] = "Edit category";
                     Category editCategory = CatalogBLL.GetCategory(Convert.ToInt32(id));
                     if (editCategory == null)
-                    {
                         return RedirectToAction("Index");
-                    }
+
                     return View(editCategory);
                 }
             }

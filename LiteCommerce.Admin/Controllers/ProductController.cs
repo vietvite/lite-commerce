@@ -135,7 +135,17 @@ namespace LiteCommerce.Controllers
                 }
                 catch (MissingFieldException)
                 {
-                    return View(model);
+                    Product errorProduct = new Product()
+                    {
+                        ProductID = model.ProductID,
+                        ProductName = model.ProductName,
+                        SupplierID = model.SupplierID,
+                        CategoryID = model.CategoryID,
+                        QuantityPerUnit = model.QuantityPerUnit,
+                        UnitPrice = model.UnitPrice,
+                        Descriptions = model.Descriptions,
+                    };
+                    return View(errorProduct);
                 }
                 catch (Exception ex)
                 {
