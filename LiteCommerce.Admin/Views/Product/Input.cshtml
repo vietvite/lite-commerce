@@ -22,8 +22,8 @@
                             <input name="ProductName" value="@Model.ProductName" type="text" class="form-control" placeholder="Enter product Name" autofocus>
                             @Html.ValidationMessage("ProductName", new { @class="help-block"  })
                         </div>
-                        <div class="form-group row">
-                            <div class="col-sm-6">
+                        <div class="row">
+                            <div class="form-group col-sm-6">
                                 <label>Supplier:</label>
                                 <select class="form-control" name="SupplierID">
                                     @foreach (var supplier in LiteCommerce.SelectListHelper.Suppliers())
@@ -37,7 +37,7 @@
                                 </select>
                                 @Html.ValidationMessage("SupplierID", new { @class="help-block"  })
                             </div>
-                            <div class="col-sm-6">
+                            <div class="form-group col-sm-6">
                                 <label>Category:</label>
                                 <select class="form-control" name="CategoryID">
                                     @foreach (var category in LiteCommerce.SelectListHelper.Categories())
@@ -54,12 +54,12 @@
                                 @Html.ValidationMessage("CategoryID", new { @class="help-block"  })
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <div class="col-sm-6">
+                        <div class="row">
+                            <div class="form-group col-sm-6">
                                 <label>Quantity/Unit:</label>
                                 <input name="QuantityPerUnit" value="@Model.QuantityPerUnit" type="text" class="form-control" placeholder="Quantity/Unit">
                             </div>
-                            <div class="col-sm-6">
+                            <div class="form-group col-sm-6">
                                 <label>Unit price:</label>
                                 <input name="UnitPrice" value="@Model.UnitPrice" type="number" class="form-control" placeholder="Unit price">
                             </div>
@@ -88,95 +88,98 @@
         </div>
         <!-- /.tab-pane -->
 
-        <div class="tab-pane" id="tab_2">
-            <div class="text-right" style="margin-bottom: 14px;">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                    Add Attribute
-                </button>
-            </div>
-
-            <!-- Edit attribute -->
-            <form id="edit-attribute" action="~/Product/Attribute/@LiteCommerce.Common.ViewHelper.MaybeID(@Model.ProductID)" method="POST"  role="form">
-                @for (int i = 0; i < listAttribute.Count; i++)
-                {
-                    @Html.TextBoxFor(m => listAttribute[i].AttributeID,
-                                new { @type="text", @class="form-control", @placehoder="Input search value...", @readonly = "readonly", @style = "display: none;"})
-                    @Html.TextBoxFor(m => listAttribute[i].ProductID,
-                                new { @type="text", @class="form-control", @placehoder="Input search value...", @readonly = "readonly", @style = "display: none;"})
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label>Attribute name</label>
-                            @Html.TextBoxFor(m => listAttribute[i].AttributeName,
-                                new { @type="text", @class="form-control", @placehoder="Input search value..."})
-                        </div>
-                        <div class="col-sm-6">
-                            <label>Attribute value</label>
-                            @Html.TextBoxFor(m => listAttribute[i].AttributeValues,
-                                new { @type="text", @class="form-control", @placehoder="Input search value..."})
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Display order</label>
-                            @Html.TextBoxFor(m => listAttribute[i].DisplayOrder,
-                                new { @type="text", @class="form-control", @placehoder="Input search value..."})
-                        </div>
-                        <div class="col-sm-1">
-                            <label></label>
-                            <a id="delete-attribute" type="button" href="~/Product/Attribute/@LiteCommerce.Common.ViewHelper.MaybeID(@Model.ProductID)?attributeID=@listAttribute[i].AttributeID" class="btn btn-default" style="margin-top: 24px;">
-                                <i class="fa fa-remove"></i>
-                            </a>
-                        </div>
-                    </div>
-                }
-                <div class="box-footer">
-                    <button type="submit" class="btn btn-sm btn-primary">
-                        <i class="fa fa-save"></i> Save
+        @if(Model.ProductID != 0) {
+            <div class="tab-pane" id="tab_2">
+                <div class="text-right" style="margin-bottom: 14px;">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">
+                        Add Attribute
                     </button>
-                    <a class="btn btn-sm btn-default" href="~/Product">
-                        Cancel
-                    </a>
                 </div>
-            </form>
 
-            <!-- Add attribute modal -->
-            <div class="modal fade" id="modal-default" style="display: none;">
-                <div class="modal-dialog">
-                    <form action="~/Product/Input/@LiteCommerce.Common.ViewHelper.MaybeID(@Model.ProductID)?query=AddAttribute" method="POST" role="form">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span></button>
-                                <h4 class="modal-title">Add attribute</h4>
+                <!-- Edit attribute -->
+                <form id="edit-attribute" action="~/Product/Attribute/@LiteCommerce.Common.ViewHelper.MaybeID(@Model.ProductID)" method="POST"  role="form">
+                    @for (int i = 0; i < listAttribute.Count; i++)
+                    {
+                        @Html.TextBoxFor(m => listAttribute[i].AttributeID,
+                                    new { @type="text", @class="form-control", @placehoder="Input search value...", @readonly = "readonly", @style = "display: none;"})
+                        @Html.TextBoxFor(m => listAttribute[i].ProductID,
+                                    new { @type="text", @class="form-control", @placehoder="Input search value...", @readonly = "readonly", @style = "display: none;"})
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <label>Attribute name</label>
+                                @Html.TextBoxFor(m => listAttribute[i].AttributeName,
+                                    new { @type="text", @class="form-control", @placehoder="Input search value..."})
                             </div>
-                            <div class="modal-body">
-                                <input name="ProductID" value="@Model.ProductID" type="text" hidden readonly>
-                                <div class="form-group row">
-                                    <div class="col-sm-9">
-                                        <label>Attribute name</label>
-                                        <input name="AttributeName" value="" type="text" class="form-control" placeholder="Enter attribute name">
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <label>Display order</label>
-                                        <input name="DisplayOrder" value="" type="number" class="form-control" placeholder="Enter order">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12">
-                                        <label>Attribute value</label>
-                                        <textarea name="AttributeValues" class="form-control" rows="10" placeholder="Enter attribute value"></textarea>
-                                    </div>
-                                </div>
+                            <div class="col-sm-6">
+                                <label>Attribute value</label>
+                                @Html.TextBoxFor(m => listAttribute[i].AttributeValues,
+                                    new { @type="text", @class="form-control", @placehoder="Input search value..."})
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            <div class="col-sm-2">
+                                <label>Display order</label>
+                                @Html.TextBoxFor(m => listAttribute[i].DisplayOrder,
+                                    new { @type="text", @class="form-control", @placehoder="Input search value..."})
+                            </div>
+                            <div class="col-sm-1">
+                                <label></label>
+                                <a id="delete-attribute" type="button" href="~/Product/Attribute/@LiteCommerce.Common.ViewHelper.MaybeID(@Model.ProductID)?attributeID=@listAttribute[i].AttributeID" class="btn btn-default" style="margin-top: 24px;">
+                                    <i class="fa fa-remove"></i>
+                                </a>
                             </div>
                         </div>
-                    </form>
-                    <!-- /.modal-content -->
+                    }
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="fa fa-save"></i> Save
+                        </button>
+                        <a class="btn btn-sm btn-default" href="~/Product">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+
+                <!-- Add attribute modal -->
+                <div class="modal fade" id="modal-default" style="display: none;">
+                    <div class="modal-dialog">
+                        <form action="~/Product/Input/@LiteCommerce.Common.ViewHelper.MaybeID(@Model.ProductID)?query=AddAttribute" method="POST" role="form">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                    <h4 class="modal-title">Add attribute</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <input name="ProductID" value="@Model.ProductID" type="text" hidden readonly>
+                                    <div class="form-group row">
+                                        <div class="col-sm-9">
+                                            <label>Attribute name</label>
+                                            <input name="AttributeName" value="" type="text" class="form-control" placeholder="Enter attribute name">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label>Display order</label>
+                                            <input name="DisplayOrder" value="" type="number" class="form-control" placeholder="Enter order">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <label>Attribute value</label>
+                                            <textarea name="AttributeValues" class="form-control" rows="10" placeholder="Enter attribute value"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
                 </div>
-                <!-- /.modal-dialog -->
             </div>
-        </div>
+        
+        }
         <!-- /.tab-pane -->
     </div>
     <!-- /.tab-content -->
