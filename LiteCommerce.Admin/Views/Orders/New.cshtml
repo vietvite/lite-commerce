@@ -12,91 +12,105 @@
 
             <div class="form-group row">
                 <div class="col-sm-4">
-                    <label>Customers: @Html.ValidationMessage("CustomerID", new { @style="color: #FF0000" })</label>
+                    <label>Customers:</label>
                     <select class="form-control" name="CustomerID">
                         @foreach (var customer in LiteCommerce.SelectListHelper.Customers())
                         {
                             <option value="@customer.Value">@customer.Text</option>
                         }
                     </select>
+                    @Html.ValidationMessage("CustomerID", new { @class="help-block" })
                 </div>
                 <div class="col-sm-4">
-                    <label>Employees: @Html.ValidationMessage("EmployeeID", new { @style="color: #FF0000" })</label>
+                    <label>Employees:</label>
                     <select class="form-control" name="EmployeeID">
                         @foreach (var employee in LiteCommerce.SelectListHelper.Employees())
                         {
                             <option value="@employee.Value">@employee.Text</option>
                         }
                     </select>
+                    @Html.ValidationMessage("EmployeeID", new { @class="help-block" })
                 </div>
                 <div class="col-sm-4">
-                    <label>Shippers: @Html.ValidationMessage("ShipperID", new { @style="color: #FF0000" })</label>
+                    <label>Shippers:</label>
                     <select class="form-control" name="ShipperID">
                         @foreach (var shipper in LiteCommerce.SelectListHelper.Shippers())
                         {
                             <option value="@shipper.Value">@shipper.Text</option>
                         }
                     </select>
+                    @Html.ValidationMessage("ShipperID", new { @class="help-block" })
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-sm-4">
-                    <label>Order date: @Html.ValidationMessage("OrderDate", new { @style="color: #FF0000" })</label>
+                    <label>Order date:</label>
                     <input type="date" name="OrderDate" value="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" class="form-control" placeholder="Order date">
+                    @Html.ValidationMessage("OrderDate", new { @class="help-block" })
                 </div>
                 <div class="col-sm-4">
-                    <label>Required date: @Html.ValidationMessage("RequiredDate", new { @style="color: #FF0000" })</label>
+                    <label>Required date:</label>
                     <input type="date" name="RequiredDate" value="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" class="form-control" placeholder="Required date">
+                    @Html.ValidationMessage("RequiredDate", new { @class="help-block" })
                 </div>
                 <div class="col-sm-4">
-                    <label>Shipped date: @Html.ValidationMessage("ShippedDate", new { @style="color: #FF0000" })</label>
+                    <label>Shipped date:</label>
                     <input type="date" name="ShippedDate" value="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" class="form-control" placeholder="Shipped date">
+                    @Html.ValidationMessage("ShippedDate", new { @class="help-block" })
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-sm-4">
-                    <label>Freight: @Html.ValidationMessage("Freight", new { @style="color: #FF0000" }) </label>
+                    <label>Freight: </label>
                     <input name="Freight" type="number" value="" type="text" class="form-control" placeholder="Enter company Name">
+                    @Html.ValidationMessage("Freight", new { @class="help-block" })
                 </div>
                 <div class="col-sm-4">
-                    <label>Countries: @Html.ValidationMessage("ShipCountry", new { @style="color: #FF0000" })</label>
+                    <label>Countries:</label>
                     <select class="form-control" name="ShipCountry">
                         @foreach (var country in LiteCommerce.SelectListHelper.Countries())
                         {
                             <option value="@country.Value">@country.Text</option>
                         }
                     </select>
+                    @Html.ValidationMessage("ShipCountry", new { @class="help-block" })
                 </div>
                 <div class="col-sm-4">
-                    <label>City: @Html.ValidationMessage("ShipCity", new { @style="color: #FF0000" })</label>
+                    <label>City:</label>
                     <input name="ShipCity" value="" type="text" class="form-control" placeholder="City">
+                    @Html.ValidationMessage("ShipCity", new { @class="help-block" })
                 </div>
             </div>
             <div class="form-group">
-                <label>Address: @Html.ValidationMessage("ShipAddress", new { @style="color: #FF0000" })</label>
+                <label>Address:</label>
                 <input name="ShipAddress" value="" type="text" class="form-control" placeholder="Address">
+                @Html.ValidationMessage("ShipAddress", new { @class="help-block" })
             </div>
             <div class="form-group row">
                 <div class="col-sm-3">
-                    <label>Products: @Html.ValidationMessage("OrderProduct", new { @style="color: #FF0000" })</label>
+                    <label>Products:</label>
                     <select class="form-control" name="OrderProduct">
                         @foreach (var country in LiteCommerce.SelectListHelper.Products())
                         {
                             <option value="@country.Value">@country.Text</option>
                         }
                     </select>
+                    @Html.ValidationMessage("OrderProduct", new { @class="help-block" })
                 </div>
                 <div class="col-sm-3">
-                    <label>Unit price: @Html.ValidationMessage("UnitPrice", new { @style="color: #FF0000" }) </label>
+                    <label>Unit price: </label>
                     <input name="UnitPrice" type="number" value="" type="text" class="form-control" placeholder="Unit price">
+                    @Html.ValidationMessage("UnitPrice", new { @class="help-block" })
                 </div>
                 <div class="col-sm-3">
-                    <label>Quantity: @Html.ValidationMessage("Quantity", new { @style="color: #FF0000" })</label>
+                    <label>Quantity:</label>
                     <input name="Quantity" value="" type="number" class="form-control" placeholder="Quantity">
+                    @Html.ValidationMessage("Quantity", new { @class="help-block" })
                 </div>
                 <div class="col-sm-3">
-                    <label>Discount: @Html.ValidationMessage("Discount", new { @style="color: #FF0000" })</label>
+                    <label>Discount:</label>
                     <input name="Discount" value="" type="number" class="form-control" placeholder="Discount">
+                    @Html.ValidationMessage("Discount", new { @class="help-block" })
                 </div>
             </div>
         </div>

@@ -10,14 +10,16 @@
             <a href="~/Countries">Back to List</a>
         </div>
         <div class="box-body">
-            <div class="form-group row">
-                <div class="col-sm-6">
-                    <label>Country ID: @Html.ValidationMessage("CountryID", new { @style="color: #FF0000" }) </label>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label>Country ID:</label>
                     <input name="CountryID" value="@Model.CountryID" type="text" class="form-control" placeholder="Enter Country ID">
+                    @Html.ValidationMessage("CountryID", new { @class="help-block" })
                 </div>
-                <div class="col-sm-6">
-                    <label>Country Name: @Html.ValidationMessage("CountryName", new { @style="color: #FF0000" }) </label>
+                <div class="form-group col-sm-6">
+                    <label>Country Name:</label>
                     <input name="CountryName" value="@Model.CountryName" type="text" class="form-control" placeholder="Country Name">
+                    @Html.ValidationMessage("CountryName", new { @class="help-block" })
                 </div>
             </div>
         </div>

@@ -18,12 +18,13 @@
                 <div class="row">
                     <div class="col-sm-9">
                         <div class="form-group">
-                            <label>Product Name: @Html.ValidationMessage("ProductName", new { @style="color: #FF0000" }) </label>
-                            <input name="ProductName" value="@Model.ProductName" type="text" class="form-control" placeholder="Enter product Name">
+                            <label>Product Name:</label>
+                            <input name="ProductName" value="@Model.ProductName" type="text" class="form-control" placeholder="Enter product Name" autofocus>
+                            @Html.ValidationMessage("ProductName", new { @class="help-block"  })
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6">
-                                <label>Supplier: @Html.ValidationMessage("SupplierID", new { @style="color: #FF0000" })</label>
+                                <label>Supplier:</label>
                                 <select class="form-control" name="SupplierID">
                                     @foreach (var supplier in LiteCommerce.SelectListHelper.Suppliers())
                                     {
@@ -34,9 +35,10 @@
                                         }
                                     }
                                 </select>
+                                @Html.ValidationMessage("SupplierID", new { @class="help-block"  })
                             </div>
                             <div class="col-sm-6">
-                                <label>Category: @Html.ValidationMessage("CategoryID", new { @style="color: #FF0000" })</label>
+                                <label>Category:</label>
                                 <select class="form-control" name="CategoryID">
                                     @foreach (var category in LiteCommerce.SelectListHelper.Categories())
                                     {
@@ -49,6 +51,7 @@
                                         }
                                     }
                                 </select>
+                                @Html.ValidationMessage("CategoryID", new { @class="help-block"  })
                             </div>
                         </div>
                         <div class="form-group row">

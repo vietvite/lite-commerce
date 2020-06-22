@@ -13,8 +13,9 @@
         <input type="text" name="CategoryID" value="@Model.CategoryID" hidden readonly/>
         <div class="box-body">
             <div class="form-group">
-                <label>Category Name:  @Html.ValidationMessage("CategoryName", new { @style="color: #FF0000" }) </label>
+                <label>Category Name:</label>
                 <input type="text" name="CategoryName" value="@Model.CategoryName" class="form-control" placeholder="Enter category name">
+                @Html.ValidationMessage("CategoryName", new { @class="help-block" })
             </div>
             <!-- textarea -->
             <div class="form-group">

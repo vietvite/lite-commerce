@@ -12,17 +12,18 @@
         </div>
         <input name="ShipperID" value="@Model.ShipperID" readonly hidden/>
         <div class="box-body">
-            <div class="form-group row">
-                <div class="col-sm-6">
-                    <label>Company Name: @Html.ValidationMessage("CompanyName", new { @style="color: #FF0000" }) </label>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label>Company Name:</label>
                     <div class="input-group">
                         <div class="input-group-addon">
                             <i class="fa fa-phone"></i>
                         </div>
-                        <input type="text" name="CompanyName" value="@Model.CompanyName" class="form-control" placeholder="Enter company name">
+                        <input type="text" name="CompanyName" value="@Model.CompanyName" class="form-control" placeholder="Enter company name" autofocus>
                     </div>
+                    @Html.ValidationMessage("CompanyName", new { @class="help-block" })
                 </div>
-                <div class="col-sm-6">
+                <div class="form-group col-sm-6">
                     <label>Phone:</label>
                     <div class="input-group">
                         <div class="input-group-addon">

@@ -13,15 +13,17 @@
         <input name="SupplierId" value="@Model.SupplierId" type="text" hidden readonly>
         <div class="box-body">
             <div class="form-group">
-                <label>Company Name: @Html.ValidationMessage("CompanyName", new { @style="color: #FF0000" }) </label>
-                <input name="CompanyName" value="@Model.CompanyName" type="text" class="form-control" placeholder="Enter Company Name">
+                <label>Company Name:</label>
+                <input name="CompanyName" value="@Model.CompanyName" type="text" class="form-control" placeholder="Enter Company Name" autofocus>
+                @Html.ValidationMessage("CompanyName", new { @class="help-block" })
             </div>
-            <div class="form-group row">
-                <div class="col-sm-6">
-                    <label>Contact Name: @Html.ValidationMessage("ContactName", new { @style="color: #FF0000" }) </label>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label>Contact Name:</label>
                     <input name="ContactName" value="@Model.ContactName" type="text" class="form-control" placeholder="Contact Name">
+                    @Html.ValidationMessage("ContactName", new { @class="help-block" })
                 </div>
-                <div class="col-sm-6">
+                <div class="form-group col-sm-6">
                     <label>Contact Title:</label>
                     <input name="ContactTitle" value="@Model.ContactTitle" type="text" class="form-control" placeholder="Ex: Sale Manager">
                 </div>
@@ -30,8 +32,8 @@
                 <label>Address:</label>
                 <input name="Address" value="@Model.Address" type="text" class="form-control" placeholder="Address">
             </div>
-            <div class="form-group row">
-                <div class="col-sm-6">
+            <div class="row">
+                <div class="form-group col-sm-6">
                     <label>Country:</label>
                     <select class="form-control" name="Country">
                         @foreach (var country in LiteCommerce.SelectListHelper.Countries())
@@ -40,13 +42,13 @@
                         }
                     </select>
                 </div>
-                <div class="col-sm-6">
+                <div class="form-group col-sm-6">
                     <label>City:</label>
                     <input name="City" value="@Model.City" type="text" class="form-control" placeholder="Ex: New Orleans">
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-sm-6">
+            <div class="row">
+                <div class="form-group col-sm-6">
                     <label>Phone:</label>
                     <div class="input-group">
                         <div class="input-group-addon">
@@ -55,7 +57,7 @@
                         <input name="Phone" value="@Model.Phone" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="form-group col-sm-6">
                     <label>Fax:</label>
                     <div class="input-group">
                         <div class="input-group-addon">

@@ -12,34 +12,40 @@
         <div class="box-body">
             <div class="row">
                 <div class="col-sm-9">
-                    <div class="form-group row">
-                        <div class="col-sm-6">
-                            <label>Last name: @Html.ValidationMessage("LastName", new { @style="color: #FF0000" }) </label>
-                            <input type="text" name="LastName" value="@Model.LastName" class="form-control" placeholder="Last name">
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Last name: </label>
+                            <input type="text" name="LastName" value="@Model.LastName" class="form-control" placeholder="Last name" autofocus>
+                            @Html.ValidationMessage("LastName", new { @class="help-block" })
                         </div>
-                        <div class="col-sm-6">
-                            <label>First name: @Html.ValidationMessage("FirstName", new { @style="color: #FF0000" }) </label>
+                        <div class="form-group col-sm-6">
+                            <label>First name: </label>
                             <input type="text" name="FirstName" value="@Model.FirstName" class="form-control" placeholder="First name">
+                            @Html.ValidationMessage("FirstName", new { @class="help-block" })
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-6">
-                            <label>Title: @Html.ValidationMessage("Title", new { @style="color: #FF0000" }) </label>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Title: </label>
                             <input type="text" name="Title" value="@Model.Title" class="form-control" placeholder="Enter title">
+                            @Html.ValidationMessage("Title", new { @class="help-block" })
                         </div>
-                        <div class="col-sm-6">
-                            <label>Email: @Html.ValidationMessage("Email", new { @style="color: #FF0000" }) </label>
+                        <div class="form-group col-sm-6">
+                            <label>Email: </label>
                             <input type="email" name="Email" value="@Model.Email" class="form-control" placeholder="Email">
+                            @Html.ValidationMessage("Email", new { @class="help-block" })
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-6">
-                            <label>Birthday: @Html.ValidationMessage("BirthDate", new { @style="color: #FF0000" })</label>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Birthday:</label>
                             <input type="date" name="BirthDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BirthDate)" class="form-control" placeholder="Birthday">
+                            @Html.ValidationMessage("BirthDate", new { @class="help-block" })
                         </div>
-                        <div class="col-sm-6">
-                            <label>Hire day: @Html.ValidationMessage("HireDay", new { @style="color: #FF0000" })</label>
+                        <div class="form-group col-sm-6">
+                            <label>Hire day:</label>
                             <input type="date" name="HireDate" value="@string.Format("{0:yyyy-MM-dd}", @Model.HireDate)" class="form-control" placeholder="Hire day">
+                            @Html.ValidationMessage("HireDay", new { @class="help-block" })
                         </div>
                     </div>
                 </div>
@@ -48,8 +54,8 @@
                     <input id="PhotoPath_file" type="file" name="PhotoPath" value="@Model.PhotoPath" style="display: none;">
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-sm-6">
+            <div class="row">
+                <div class="form-group col-sm-6">
                     <label>Country:</label>
                     <select class="form-control" name="Country" value="@Model.Country">
                         @foreach (var country in LiteCommerce.SelectListHelper.Countries())
@@ -62,17 +68,17 @@
                         }
                     </select>
                 </div>
-                <div class="col-sm-6">
+                <div class="form-group col-sm-6">
                     <label>City:</label>
                     <input type="text" name="City" value="@Model.City" class="form-control" placeholder="Ex: New Orleans">
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-sm-6">
+            <div class="row">
+                <div class="form-group col-sm-6">
                     <label>Address:</label>
                     <input type="text" name="Address" value="@Model.Address" class="form-control" placeholder="Address">
                 </div>
-                <div class="col-sm-6">
+                <div class="form-group col-sm-6">
                     <label>Home Phone:</label>
                     <div class="input-group">
                         <div class="input-group-addon">
