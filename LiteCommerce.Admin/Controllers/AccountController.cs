@@ -99,7 +99,7 @@ namespace LiteCommerce.Controllers
         [HttpGet]
         public IActionResult LogIn()
         {
-            if (string.IsNullOrEmpty(User.FindFirst("UserID").Value))
+            if (!User.Identity.IsAuthenticated)
                 return View();
 
             return RedirectToAction("Index", "Dashboard");
