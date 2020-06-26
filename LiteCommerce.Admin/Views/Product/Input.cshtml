@@ -1,14 +1,15 @@
 ﻿@model LiteCommerce.DomainModels.Product
 @{
     ViewData["Title"] = "Products";
-    ViewData["HeaderTitle"] = "Manage Products";
     List<LiteCommerce.DomainModels.ProductAttribute> listAttribute = (List<LiteCommerce.DomainModels.ProductAttribute>)ViewData["listAttribute"];
 }
 
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab">Product</a></li>
-        <li><a href="#tab_2" data-toggle="tab">Product Attribute</a></li>
+        @if(Model.ProductID != 0) {
+            <li><a href="#tab_2" data-toggle="tab">Product Attribute</a></li>
+        }
         <li class="pull-right"><a href="~/Product">Back to list</a></li>
     </ul>
     <div class="tab-content">
