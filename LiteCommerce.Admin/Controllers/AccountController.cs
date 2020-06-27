@@ -51,7 +51,7 @@ namespace LiteCommerce.Controllers
 
                 // Update new password
                 employee.Password = _passwordHasher.Hash(password.NewPassword);
-                CatalogBLL.UpdateEmployee(employee);
+                CatalogBLL.ChangePasswordEmployee(employee);
 
                 return RedirectToAction("Index", "Dashboard");
             }
