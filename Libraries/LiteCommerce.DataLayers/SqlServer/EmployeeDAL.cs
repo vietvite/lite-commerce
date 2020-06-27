@@ -30,7 +30,7 @@ namespace LiteCommerce.DataLayers.SqlServer
                 cmd.CommandText = @"select * from (
 	                                    select ROW_NUMBER() over(order by FirstName) as RowNumber, Employees.*
 	                                    from Employees
-	                                    where ((@searchValue = N'') or (FirstName like @searchValue) or (LastName like @searchValue) or (Country like @searchValue))
+	                                    where ((@searchValue = N'') or (FirstName like @searchValue) or (LastName like @searchValue))
                                             AND ((@country = N'') or (Country = @country))
                                     ) as t
                                     where (@pageSize = -1)
