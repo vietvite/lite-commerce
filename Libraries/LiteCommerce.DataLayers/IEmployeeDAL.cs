@@ -5,9 +5,9 @@ namespace LiteCommerce.DataLayers
 {
     public interface IEmployeeDAL
     {
-        List<Employee> List(int page, int pageSize, string searchValue);
+        List<Employee> List(int page, int pageSize, string searchValue, string country);
 
-        int Count(string searchValue);
+        int Count(string searchValue, string country);
 
         Employee Get(int employeeID);
 

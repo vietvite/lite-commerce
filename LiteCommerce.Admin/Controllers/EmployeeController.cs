@@ -29,11 +29,11 @@ namespace LiteCommerce.Controllers
             _passwordHasher = passwordHasher;
         }
 
-        public IActionResult Index(int page = 1, string searchValue = "")
+        public IActionResult Index(int page = 1, string searchValue = "", string country = "")
         {
             int rowCount = 0;
             int pageSize = 10;
-            List<Employee> listOfEmployee = CatalogBLL.ListOfEmployee(page, pageSize, searchValue ?? "", out rowCount);
+            List<Employee> listOfEmployee = CatalogBLL.ListOfEmployee(page, pageSize, searchValue ?? "", out rowCount, country);
 
             var model = new Models.EmployeePaginationResult()
             {

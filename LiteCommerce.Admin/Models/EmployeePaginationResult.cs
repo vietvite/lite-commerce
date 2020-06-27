@@ -6,5 +6,6 @@ namespace LiteCommerce.Models
     public class EmployeePaginationResult : PaginationResult
     {
         public List<Employee> Data { get; set; }
+        public string SelectedCountry { get; set; }
     }
 }

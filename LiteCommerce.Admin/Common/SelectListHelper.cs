@@ -83,7 +83,7 @@ namespace LiteCommerce
                 list.Add(new SelectListItem() { Value = "0", Text = "-- All employees --" });
             }
             int rowCount = 0;
-            List<Employee> listEmployees = CatalogBLL.ListOfEmployee(1, -1, "", out rowCount);
+            List<Employee> listEmployees = CatalogBLL.ListOfEmployee(1, -1, "", out rowCount, "");
             if (listEmployees != null)
             {
                 foreach (var employee in listEmployees)

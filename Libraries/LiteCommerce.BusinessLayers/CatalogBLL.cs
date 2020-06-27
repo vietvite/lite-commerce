@@ -123,12 +123,12 @@ namespace LiteCommerce.BusinessLayers
         #endregion
 
         #region Employee
-        public static List<Employee> ListOfEmployee(int page, int pageSize, string searchValue, out int rowCount)
+        public static List<Employee> ListOfEmployee(int page, int pageSize, string searchValue, out int rowCount, string country)
         {
             if (page < 1)
                 page = 1;
-            rowCount = EmployeeDB.Count(searchValue);
-            return EmployeeDB.List(page, pageSize, searchValue);
+            rowCount = EmployeeDB.Count(searchValue, country);
+            return EmployeeDB.List(page, pageSize, searchValue, country);
         }
         public static Employee GetEmployee(int employeeID)
         {
