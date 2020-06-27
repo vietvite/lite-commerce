@@ -62,12 +62,15 @@ namespace LiteCommerce.DataLayers.SqlServer
         public int Count(string searchValue)
         {
             int count = 0;
-
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                searchValue = "%" + searchValue + "%";
+            }
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "select COUNT(*) from Categories where @searchValue = N'' or CategoryName like @searchValue";
+                cmd.CommandText = "select COUNT(*) from Categories where (@searchValue = N'') or (CategoryName like @searchValue)";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = connection;
                 cmd.Parameters.AddWithValue("@searchValue", searchValue);
@@ -131,7 +134,6 @@ namespace LiteCommerce.DataLayers.SqlServer
                                     SELECT @@IDENTITY;";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = connection;
-                cmd.Parameters.AddWithValue("@CategoryID", category.CategoryID);
                 cmd.Parameters.AddWithValue("@CategoryName", category.CategoryName);
                 cmd.Parameters.AddWithValue("@Description", category.Description);
 
