@@ -5,7 +5,7 @@ namespace LiteCommerce.Models
 {
     public class CustomerPaginationResult : PaginationResult
     {
-        public string Country { get; set; }
+        public string SelectedCountry { get; set; }
         public List<Customer> Data { get; set; }
     }
 }

@@ -4,6 +4,16 @@
     ViewData["Title"] = "Customer";
     ViewData["HeaderTitle"] = "Manage Customer";
     int i = (Model.Page - 1) * Model.PageSize;
+    string OptionalQuery = MaybeCountryQuery(Model.SelectedCountry);
+}
+
+@functions{
+    public string MaybeCountryQuery(string country)
+    {
+        return !string.IsNullOrEmpty(country)
+            ? $"&country={country}"
+            : "";
+    }
 }
 
 <div class="box box-primary">
@@ -14,14 +24,16 @@
                     <select class="form-control" name="country">
                         @foreach (var country in LiteCommerce.SelectListHelper.Countries())
                         {
-                            <option value="@country.Value">@country.Text</option>
+                            if(country.Value == Model.SelectedCountry) {
+                                <option value="@country.Value" selected>@country.Text</option>
+                            } else {
+                                <option value="@country.Value">@country.Text</option>
+                            }
                         }
                     </select>
                 </div>
                 <div class="col-sm-6">
                     <div class="input-group">
-                        @* @Html.TextBox("SearchValue",
-                            new { @type="text", @class="form-control", @placehoder="Input search value..."}) *@
                         <input name="searchValue" value="@Model.SearchValue" type="text" class="form-control" placeholder="Search company name">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-primary btn-flat">
@@ -96,7 +108,7 @@
         </div>
         <div class="box-footer clearfix text-center">
             <ul class="pagination pagination-sm no-margin pull-right">
-                @LiteCommerce.Common.ViewHelper.RenderPageButton("Customer", Model.Page, Model.PageCount, 3, Model.SearchValue)
+                @LiteCommerce.Common.ViewHelper.RenderPageButton("Customer", Model.Page, Model.PageCount, 3, Model.SearchValue, OptionalQuery)
             </ul>
         </div>
     </div>

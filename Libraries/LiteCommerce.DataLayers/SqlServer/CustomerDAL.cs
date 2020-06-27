@@ -79,10 +79,12 @@ namespace LiteCommerce.DataLayers.SqlServer
             {
                 connection.Open();
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "select COUNT(*) from Customers where @searchValue = N'' or CompanyName like @searchValue";
+                cmd.CommandText = @"select COUNT(*) from Customers where ((@searchValue = N'') or (CompanyName like @searchValue))
+                                                                        AND (@country = N'') or (Country = @country)";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = connection;
                 cmd.Parameters.AddWithValue("@searchValue", searchValue);
+                cmd.Parameters.AddWithValue("@country", country);
 
                 count = Convert.ToInt32(cmd.ExecuteScalar());
 
