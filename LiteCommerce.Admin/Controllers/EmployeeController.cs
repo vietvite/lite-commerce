@@ -42,6 +42,7 @@ namespace LiteCommerce.Controllers
                 PageSize = pageSize,
                 RowCount = rowCount,
                 SearchValue = searchValue,
+                SelectedCountry = country,
             };
 
             return View(model);
