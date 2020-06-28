@@ -14,6 +14,12 @@ namespace LiteCommerce.DataLayers
             this.connectionString = connectionString;
         }
 
+        /// <summary>
+        /// Authenticate login employee
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public UserAccount Authenticate(string email, string password)
         {
             Employee employee = null;
@@ -73,6 +79,11 @@ namespace LiteCommerce.DataLayers
             return null;
         }
 
+        /// <summary>
+        /// Get detail of employee
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public UserAccount GetAccount(string email)
         {
             Employee employee = null;

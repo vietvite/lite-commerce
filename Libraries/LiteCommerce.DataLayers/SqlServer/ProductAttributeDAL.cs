@@ -14,6 +14,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             this.connectionString = connectionString;
         }
 
+        /// <summary>
+        /// Get list of product attribute
+        /// </summary>
+        /// <param name="ProductID"></param>
+        /// <returns></returns>
         public List<ProductAttribute> List(int ProductID)
         {
             List<ProductAttribute> listAttributes = new List<ProductAttribute>();
@@ -49,37 +54,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return listAttributes;
         }
 
-        // public ProductAttribute Get(int categoryID)
-        // {
-        //   ProductAttribute data = null;
-        //   using (SqlConnection connection = new SqlConnection(connectionString))
-        //   {
-        //     connection.Open();
-
-        //     SqlCommand cmd = new SqlCommand();
-        //     cmd.CommandText = @"SELECT * FROM Categories WHERE CategoryID = @categoryID";
-        //     cmd.CommandType = CommandType.Text;
-        //     cmd.Connection = connection;
-        //     cmd.Parameters.AddWithValue("@categoryID", categoryID);
-
-        //     using (SqlDataReader dbReader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
-        //     {
-        //       if (dbReader.Read())
-        //       {
-        //         data = new ProductAttribute()
-        //         {
-        //           CategoryID = Convert.ToInt32(dbReader["CategoryID"]),
-        //           CategoryName = Convert.ToString(dbReader["CategoryName"]),
-        //           Description = Convert.ToString(dbReader["Description"]),
-        //         };
-        //       }
-        //     }
-
-        //     connection.Close();
-        //   }
-        //   return data;
-        // }
-
+        /// <summary>
+        /// Add product attribute
+        /// </summary>
+        /// <param name="productAttribute"></param>
+        /// <returns></returns>
         public int Add(ProductAttribute productAttribute)
         {
             int returnedProductAttributeId = 0;
@@ -118,6 +97,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return returnedProductAttributeId;
         }
 
+        /// <summary>
+        /// Update product attribute
+        /// </summary>
+        /// <param name="listAttributes"></param>
+        /// <returns></returns>
         public bool Update(List<ProductAttribute> listAttributes)
         {
             int countRowsAffected = 0;
@@ -160,6 +144,12 @@ namespace LiteCommerce.DataLayers.SqlServer
             return countRowsAffected > 0;
         }
 
+        /// <summary>
+        /// Delete order by list of productID
+        /// </summary>
+        /// <param name="ProductID"></param>
+        /// <param name="AttributeID"></param>
+        /// <returns></returns>
         public int Delete(string ProductID, string AttributeID)
         {
             int countDeleted = 0;

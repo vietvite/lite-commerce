@@ -14,6 +14,16 @@ namespace LiteCommerce.DataLayers.SqlServer
             this.connectionString = connectionString;
         }
 
+        /// <summary>
+        /// List of orders
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="countryID"></param>
+        /// <param name="categoryID"></param>
+        /// <param name="employeeID"></param>
+        /// <param name="shipperID"></param>
+        /// <returns></returns>
         public List<Order> List(int page, int pageSize, string countryID, string categoryID, string employeeID, string shipperID)
         {
             List<Order> listOrder = new List<Order>();
@@ -112,6 +122,14 @@ namespace LiteCommerce.DataLayers.SqlServer
             return listOrder;
         }
 
+        /// <summary>
+        /// Count row of list order
+        /// </summary>
+        /// <param name="countryID"></param>
+        /// <param name="categoryID"></param>
+        /// <param name="employeeID"></param>
+        /// <param name="shipperID"></param>
+        /// <returns></returns>
         public int Count(string countryID, string categoryID, string employeeID, string shipperID)
         {
             int count = 0;
@@ -160,6 +178,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return count;
         }
 
+        /// <summary>
+        /// Get order
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <returns></returns>
         public List<OrderDetails> Get(int orderID)
         {
             List<OrderDetails> listOrderDetails = listOrderDetails = new List<OrderDetails>();
@@ -241,6 +264,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return listOrderDetails;
         }
 
+        /// <summary>
+        /// Add order
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
         public int Add(OrderDetails order)
         {
             int orderId = 0;
@@ -322,6 +350,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return orderId;
         }
 
+        /// <summary>
+        /// Update order
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
         public bool Update(OrderDetails order)
         {
             int rowsAffected = 0;
@@ -362,6 +395,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return rowsAffected > 0;
         }
 
+        /// <summary>
+        /// Delete order by list of orderID
+        /// </summary>
+        /// <param name="categoryIDs"></param>
+        /// <returns></returns>
         public int Delete(int[] categoryIDs)
         {
             int countDeleted = 0;

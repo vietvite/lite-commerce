@@ -13,6 +13,15 @@ namespace LiteCommerce.DataLayers.SqlServer
         {
             this.connectionString = connectionString;
         }
+        /// <summary>
+        /// Get list of products
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchValue"></param>
+        /// <param name="categoryID"></param>
+        /// <param name="supplierID"></param>
+        /// <returns></returns>
         public List<Product> List(int page, int pageSize, string searchValue, string categoryID, string supplierID)
         {
             List<Product> listProduct = new List<Product>();
@@ -93,6 +102,13 @@ namespace LiteCommerce.DataLayers.SqlServer
             return listProduct;
         }
 
+        /// <summary>
+        /// Count row of list product
+        /// </summary>
+        /// <param name="searchValue"></param>
+        /// <param name="categoryID"></param>
+        /// <param name="supplierID"></param>
+        /// <returns></returns>
         public int Count(string searchValue, string categoryID, string supplierID)
         {
             int count = 0;
@@ -135,6 +151,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return count;
         }
 
+        /// <summary>
+        /// Get detail product
+        /// </summary>
+        /// <param name="productID"></param>
+        /// <returns></returns>
         public Product Get(int productID)
         {
             Product data = null;
@@ -190,6 +211,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return data;
         }
 
+        /// <summary>
+        /// Add product
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         public int Add(Product product)
         {
             int productId = 0;
@@ -237,6 +263,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return productId;
         }
 
+        /// <summary>
+        /// Update product
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         public bool Update(Product product)
         {
             int rowsAffected = 0;
@@ -273,6 +304,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return rowsAffected > 0;
         }
 
+        /// <summary>
+        /// Delete order by list of productID
+        /// </summary>
+        /// <param name="productIDs"></param>
+        /// <returns></returns>
         public int Delete(int[] productIDs)
         {
             int countDeleted = 0;

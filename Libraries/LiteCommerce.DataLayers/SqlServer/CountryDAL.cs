@@ -14,6 +14,13 @@ namespace LiteCommerce.DataLayers.SqlServer
             this.connectionString = connectionString;
         }
 
+        /// <summary>
+        /// List of countries
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchValue"></param>
+        /// <returns></returns>
         public List<Country> List(int page, int pageSize, string searchValue)
         {
             List<Country> listCountry = new List<Country>();
@@ -59,6 +66,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return listCountry;
         }
 
+        /// <summary>
+        /// Count row of list country
+        /// </summary>
+        /// <param name="searchValue"></param>
+        /// <returns></returns>
         public int Count(string searchValue)
         {
             int count = 0;
@@ -83,6 +95,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return count;
         }
 
+        /// <summary>
+        /// Get country
+        /// </summary>
+        /// <param name="countryID"></param>
+        /// <returns></returns>
         public Country Get(string countryID)
         {
             Country data = null;
@@ -113,6 +130,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return data;
         }
 
+        /// <summary>
+        /// Add country
+        /// </summary>
+        /// <param name="country"></param>
+        /// <returns></returns>
         public string Add(Country country)
         {
             using (SqlConnection connection = new SqlConnection(this.connectionString))
@@ -150,6 +172,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             }
         }
 
+        /// <summary>
+        /// Update country
+        /// </summary>
+        /// <param name="country"></param>
+        /// <returns></returns>
         public bool Update(Country country)
         {
             int rowsAffected = 0;
@@ -174,6 +201,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return rowsAffected > 0;
         }
 
+        /// <summary>
+        /// Delete category by list of countryID
+        /// </summary>
+        /// <param name="countryIDs"></param>
+        /// <returns></returns>
         public int Delete(string[] countryIDs)
         {
             int countDeleted = 0;

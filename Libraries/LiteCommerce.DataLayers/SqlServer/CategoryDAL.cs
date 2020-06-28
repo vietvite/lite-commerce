@@ -14,6 +14,13 @@ namespace LiteCommerce.DataLayers.SqlServer
             this.connectionString = connectionString;
         }
 
+        /// <summary>
+        /// Get list of category
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchValue"></param>
+        /// <returns></returns>
         public List<Category> List(int page, int pageSize, string searchValue)
         {
             List<Category> listCategory = new List<Category>();
@@ -59,6 +66,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return listCategory;
         }
 
+        /// <summary>
+        /// Count row of list category
+        /// </summary>
+        /// <param name="searchValue"></param>
+        /// <returns></returns>
         public int Count(string searchValue)
         {
             int count = 0;
@@ -82,6 +94,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return count;
         }
 
+        /// <summary>
+        /// Get category
+        /// </summary>
+        /// <param name="categoryID"></param>
+        /// <returns></returns>
         public Category Get(int categoryID)
         {
             Category data = null;
@@ -113,6 +130,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return data;
         }
 
+        /// <summary>
+        /// Add category
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         public int Add(Category category)
         {
             int categoryId = 0;
@@ -145,6 +167,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return categoryId;
         }
 
+        /// <summary>
+        /// Update category
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         public bool Update(Category category)
         {
             int rowsAffected = 0;
@@ -171,6 +198,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return rowsAffected > 0;
         }
 
+        /// <summary>
+        /// Delete category by list of categoryID
+        /// </summary>
+        /// <param name="categoryIDs"></param>
+        /// <returns></returns>
         public int Delete(int[] categoryIDs)
         {
             int countDeleted = 0;

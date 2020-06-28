@@ -13,6 +13,15 @@ namespace LiteCommerce.DataLayers.SqlServer
         {
             this.connectionString = connectionString;
         }
+
+        /// <summary>
+        /// List of employees
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchValue"></param>
+        /// <param name="country"></param>
+        /// <returns></returns>
         public List<Employee> List(int page, int pageSize, string searchValue, string country)
         {
             List<Employee> listEmployee = new List<Employee>();
@@ -72,6 +81,12 @@ namespace LiteCommerce.DataLayers.SqlServer
             return listEmployee;
         }
 
+        /// <summary>
+        /// Count row of list employee
+        /// </summary>
+        /// <param name="searchValue"></param>
+        /// <param name="country"></param>
+        /// <returns></returns>
         public int Count(string searchValue, string country)
         {
             int count = 0;
@@ -100,6 +115,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return count;
         }
 
+        /// <summary>
+        /// Get employee
+        /// </summary>
+        /// <param name="employeeID"></param>
+        /// <returns></returns>
         public Employee Get(int employeeID)
         {
             Employee data = null;
@@ -142,6 +162,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return data;
         }
 
+        /// <summary>
+        /// Add employee
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
         public int Add(Employee employee)
         {
             int employeeID = 0;
@@ -210,6 +235,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return employeeID;
         }
 
+        /// <summary>
+        /// Update employee
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
         public bool Update(Employee employee)
         {
             int rowsAffected = 0;
@@ -256,6 +286,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return rowsAffected > 0;
         }
 
+        /// <summary>
+        /// Delete category by list of employeeID
+        /// </summary>
+        /// <param name="employeeIDs"></param>
+        /// <returns></returns>
         public int Delete(int[] employeeIDs)
         {
             int countDeleted = 0;
@@ -283,6 +318,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return countDeleted;
         }
 
+        /// <summary>
+        /// Change password of employee
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
         public bool ChangePassword(Employee employee)
         {
             int rowsAffected = 0;
@@ -307,6 +347,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return rowsAffected > 0;
         }
 
+        /// <summary>
+        /// Update employee profile
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
         public bool UpdateProfile(Employee employee)
         {
             int rowsAffected = 0;

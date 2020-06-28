@@ -13,6 +13,14 @@ namespace LiteCommerce.DataLayers.SqlServer
         {
             this.connectionString = connectionString;
         }
+
+        /// <summary>
+        /// Get list of shippers
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchValue"></param>
+        /// <returns></returns>
         public List<Shipper> List(int page, int pageSize, string searchValue)
         {
             List<Shipper> listShipper = new List<Shipper>();
@@ -57,6 +65,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return listShipper;
         }
 
+        /// <summary>
+        /// Count row of list shipper
+        /// </summary>
+        /// <param name="searchValue"></param>
+        /// <returns></returns>
         public int Count(string searchValue)
         {
             int count = 0;
@@ -81,6 +94,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return count;
         }
 
+        /// <summary>
+        /// Get detail shipper
+        /// </summary>
+        /// <param name="shipperID"></param>
+        /// <returns></returns>
         public Shipper Get(int shipperID)
         {
             Shipper data = null;
@@ -112,6 +130,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return data;
         }
 
+        /// <summary>
+        /// Add shipper
+        /// </summary>
+        /// <param name="shipper"></param>
+        /// <returns></returns>
         public int Add(Shipper shipper)
         {
             int shipperID = 0;
@@ -144,6 +167,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return shipperID;
         }
 
+        /// <summary>
+        /// Update shipper
+        /// </summary>
+        /// <param name="shipper"></param>
+        /// <returns></returns>
         public bool Update(Shipper shipper)
         {
             int rowsAffected = 0;
@@ -170,6 +198,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return rowsAffected > 0;
         }
 
+        /// <summary>
+        /// Delete order by list of shipperID
+        /// </summary>
+        /// <param name="shipperIDs"></param>
+        /// <returns></returns>
         public int Delete(int[] shipperIDs)
         {
             int countDeleted = 0;

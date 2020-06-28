@@ -13,6 +13,15 @@ namespace LiteCommerce.DataLayers.SqlServer
         {
             this.connectionString = connectionString;
         }
+
+        /// <summary>
+        /// List of customer
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchValue"></param>
+        /// <param name="country"></param>
+        /// <returns></returns>
         public List<Customer> List(int page, int pageSize, string searchValue, string country)
         {
             List<Customer> listCustomer = new List<Customer>();
@@ -67,6 +76,12 @@ namespace LiteCommerce.DataLayers.SqlServer
             return listCustomer;
         }
 
+        /// <summary>
+        /// Count row of list customer
+        /// </summary>
+        /// <param name="searchValue"></param>
+        /// <param name="country"></param>
+        /// <returns></returns>
         public int Count(string searchValue, string country)
         {
             int count = 0;
@@ -93,6 +108,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return count;
         }
 
+        /// <summary>
+        /// Get customer
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
         public Customer Get(string customerID)
         {
             Customer data = null;
@@ -130,6 +150,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return data;
         }
 
+        /// <summary>
+        /// Add customer
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
         public string Add(Customer customer)
         {
             string CustomerID = "0";
@@ -183,6 +208,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return CustomerID;
         }
 
+        /// <summary>
+        /// Update customer
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
         public bool Update(Customer customer)
         {
             int rowsAffected = 0;
@@ -221,6 +251,11 @@ namespace LiteCommerce.DataLayers.SqlServer
             return rowsAffected > 0;
         }
 
+        /// <summary>
+        /// Delete category by list of customerID
+        /// </summary>
+        /// <param name="customerIDs"></param>
+        /// <returns></returns>
         public int Delete(string[] customerIDs)
         {
             int countDeleted = 0;
