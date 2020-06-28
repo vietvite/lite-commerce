@@ -115,6 +115,12 @@ namespace LiteCommerce.DataLayers.SqlServer
         public int Count(string countryID, string categoryID, string employeeID, string shipperID)
         {
             int count = 0;
+            if (categoryID == "0")
+                categoryID = "";
+            if (employeeID == "0")
+                employeeID = "";
+            if (shipperID == "0")
+                shipperID = "";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
