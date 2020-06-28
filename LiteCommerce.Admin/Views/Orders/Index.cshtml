@@ -11,7 +11,7 @@
     <div class="box-body">
         <form action="~/Orders" method="GET" >
             <div class="form-group row">
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <label>Countries</label>
                     <select class="form-control" name="country">
                         @foreach (var country in LiteCommerce.SelectListHelper.Countries())
@@ -25,7 +25,7 @@
                         }
                     </select>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <label>Categories</label>
                     <select class="form-control" name="category">
                         @foreach (var category in LiteCommerce.SelectListHelper.Categories())
@@ -40,7 +40,7 @@
                         }
                     </select>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <label>Employees</label>
                     <select class="form-control" name="employee">
                         @foreach (var employee in LiteCommerce.SelectListHelper.Employees())
@@ -55,7 +55,7 @@
                         }
                     </select>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <label>Shippers</label>
                     <select class="form-control" name="shipper">
                         @foreach (var shipper in LiteCommerce.SelectListHelper.Shippers())
@@ -70,12 +70,10 @@
                         }
                     </select>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-3 col-sm-offset-9">
+                <div class="col-sm-4">
                     <div class="input-group">
                         <span class="input-group-btn">
-                            <button type="submit" class="btn btn-block btn-default"><i class="fa fa-search"></i></button>
+                            <button type="submit" class="btn btn-block btn-primary text-primary" style="margin-top: 24px;"><i class="fa fa-search"></i></button>
                         </span>
                     </div>
                 </div>
