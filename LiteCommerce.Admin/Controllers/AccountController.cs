@@ -38,6 +38,10 @@ namespace LiteCommerce.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
+        /// <summary>
+        /// View page: Profile infomation
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Index()
         {
@@ -45,6 +49,12 @@ namespace LiteCommerce.Controllers
             return View(employee);
         }
 
+        /// <summary>
+        /// Update profile infomation
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Index(EmployeePostRequest model, string id = "")
         {
@@ -94,12 +104,21 @@ namespace LiteCommerce.Controllers
             // return View(employee);
         }
 
+        /// <summary>
+        /// View Page: Change password
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult ChangePassword()
         {
             return View();
         }
 
+        /// <summary>
+        /// Update user password
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult ChangePassword(PasswordPostRequest password)
         {
@@ -131,6 +150,11 @@ namespace LiteCommerce.Controllers
             public string ReNewPassword { get; set; }
         }
 
+        /// <summary>
+        /// Validate input of change password post request
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="outEmployee"></param>
         public void ValidatePassword(PasswordPostRequest password, out Employee outEmployee)
         {
             if (string.IsNullOrEmpty(password.OldPassword))
@@ -164,6 +188,12 @@ namespace LiteCommerce.Controllers
             return RedirectToAction("Index", "Dashboard");
         }
 
+        /// <summary>
+        /// View page: login page
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost]
@@ -215,6 +245,11 @@ namespace LiteCommerce.Controllers
             return RedirectToAction("LogIn");
         }
 
+        /// <summary>
+        /// Validate whether email and password is null
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
         private void CheckNotNull(string email, string password)
         {
             if (string.IsNullOrEmpty(email))
@@ -227,6 +262,10 @@ namespace LiteCommerce.Controllers
                 throw new MissingFieldException();
         }
 
+        /// <summary>
+        /// Validate update user profile post request is null
+        /// </summary>
+        /// <param name="model"></param>
         private void CheckNotNull(EmployeePostRequest model)
         {
             if (string.IsNullOrEmpty(model.LastName))
@@ -257,6 +296,11 @@ namespace LiteCommerce.Controllers
                 throw new MissingFieldException();
         }
 
+        /// <summary>
+        /// Upload image handler
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         private string UploadedFile(EmployeePostRequest model)
         {
             string uniqueFileName = null;
