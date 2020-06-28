@@ -123,6 +123,16 @@ namespace LiteCommerce.Controllers
             {
                 CheckNotNull(model);
 
+                int rowCount = 0;
+                List<Product> listOfProduct = CatalogBLL.ListOfProduct(1, -1, "", out rowCount, "", "");
+
+                int unitPrice = 0;
+                foreach (var product in listOfProduct)
+                {
+                    if (product.ProductID == model.OrderProduct)
+                        unitPrice = product.UnitPrice;
+                }
+
                 OrderDetails order = new OrderDetails()
                 {
                     OrderID = model.OrderID,
@@ -149,7 +159,7 @@ namespace LiteCommerce.Controllers
                     {
                         ProductID = Convert.ToInt32(model.OrderProduct),
                     },
-                    UnitPrice = model.UnitPrice,
+                    UnitPrice = unitPrice,
                     Quantity = model.Quantity,
                     Discount = model.Discount,
                 };
@@ -270,8 +280,6 @@ namespace LiteCommerce.Controllers
 
             if (order.OrderProduct == 0)
                 ModelState.AddModelError("OrderProduct", "OrderProduct expected");
-            if (order.UnitPrice == 0)
-                ModelState.AddModelError("UnitPrice", "Unit price expected");
             if (order.Quantity == 0)
                 ModelState.AddModelError("Quantity", "Quantity expected");
 

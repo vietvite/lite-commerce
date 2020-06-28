@@ -141,9 +141,6 @@
                     @foreach (var order in Model.Data)
                     {
                         <tr>
-                            <td>
-                                <input type="checkbox" name="customerIDs" value="@order.OrderID" />
-                            </td>
                             <td>@(++i)</td>
                             <td><p title="OrderID">@order.OrderID</p></td>
                             <td><p title="Customer">@order.Customer.CompanyName</p></td>
