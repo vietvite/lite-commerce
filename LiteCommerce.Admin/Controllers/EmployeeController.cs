@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System.Reflection.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,6 +14,7 @@ using LiteCommerce.BusinessLayers;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using LiteCommerce.Services;
+using LiteCommerce.Common;
 
 namespace LiteCommerce.Controllers
 {
@@ -146,7 +149,7 @@ namespace LiteCommerce.Controllers
                 if (model.EmployeeID == 0)
                 {
                     // Set default password & role for new employee
-                    employee.Password = _passwordHasher.Hash("12345");
+                    employee.Password = _passwordHasher.Hash(LiteCommerce.Common.Constants.DefaultPassword);
                     employee.Roles = WebUserRoles.SALEMAN;
 
                     CatalogBLL.AddEmployee(employee);
