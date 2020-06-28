@@ -225,6 +225,16 @@ namespace LiteCommerce.Controllers
                 if (string.IsNullOrEmpty(id))
                     return RedirectToAction("Index");
 
+                int rowCount = 0;
+                List<Product> listOfProduct = CatalogBLL.ListOfProduct(1, -1, "", out rowCount, "", "");
+
+                int unitPrice = 0;
+                foreach (var product in listOfProduct)
+                {
+                    if (product.ProductID == Convert.ToInt32(orderDetail.ProductID))
+                        unitPrice = product.UnitPrice;
+                }
+
                 OrderDetails order = new OrderDetails()
                 {
                     OrderID = Convert.ToInt32(id),
@@ -232,7 +242,7 @@ namespace LiteCommerce.Controllers
                     {
                         ProductID = Convert.ToInt32(orderDetail.ProductID),
                     },
-                    UnitPrice = orderDetail.UnitPrice,
+                    UnitPrice = unitPrice,
                     Quantity = orderDetail.Quantity,
                     Discount = orderDetail.Discount,
                 };
