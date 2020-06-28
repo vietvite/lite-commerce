@@ -10,8 +10,8 @@
         </div>
         <div class="box-body">
 
-            <div class="form-group row">
-                <div class="col-sm-4">
+            <div class="row">
+                <div class="form-group col-sm-4">
                     <label>Customers:</label>
                     <select class="form-control" name="CustomerID">
                         @foreach (var customer in LiteCommerce.SelectListHelper.Customers())
@@ -21,7 +21,7 @@
                     </select>
                     @Html.ValidationMessage("CustomerID", new { @class="help-block" })
                 </div>
-                <div class="col-sm-4">
+                <div class="form-group col-sm-4">
                     <label>Employees:</label>
                     <select class="form-control" name="EmployeeID">
                         @foreach (var employee in LiteCommerce.SelectListHelper.Employees())
@@ -31,7 +31,7 @@
                     </select>
                     @Html.ValidationMessage("EmployeeID", new { @class="help-block" })
                 </div>
-                <div class="col-sm-4">
+                <div class="form-group col-sm-4">
                     <label>Shippers:</label>
                     <select class="form-control" name="ShipperID">
                         @foreach (var shipper in LiteCommerce.SelectListHelper.Shippers())
@@ -42,30 +42,30 @@
                     @Html.ValidationMessage("ShipperID", new { @class="help-block" })
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-sm-4">
+            <div class="row">
+                <div class="form-group col-sm-4">
                     <label>Order date:</label>
                     <input type="date" name="OrderDate" value="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" class="form-control" placeholder="Order date">
                     @Html.ValidationMessage("OrderDate", new { @class="help-block" })
                 </div>
-                <div class="col-sm-4">
+                <div class="form-group col-sm-4">
                     <label>Required date:</label>
                     <input type="date" name="RequiredDate" value="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" class="form-control" placeholder="Required date">
                     @Html.ValidationMessage("RequiredDate", new { @class="help-block" })
                 </div>
-                <div class="col-sm-4">
+                <div class="form-group col-sm-4">
                     <label>Shipped date:</label>
                     <input type="date" name="ShippedDate" value="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" class="form-control" placeholder="Shipped date">
                     @Html.ValidationMessage("ShippedDate", new { @class="help-block" })
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-sm-4">
+            <div class="row">
+                <div class="form-group col-sm-4">
                     <label>Freight: </label>
-                    <input name="Freight" type="number" value="" type="text" class="form-control" placeholder="Enter company Name">
+                    <input name="Freight" type="number" value="" type="text" class="form-control" placeholder="Enter freight">
                     @Html.ValidationMessage("Freight", new { @class="help-block" })
                 </div>
-                <div class="col-sm-4">
+                <div class="form-group col-sm-4">
                     <label>Countries:</label>
                     <select class="form-control" name="ShipCountry">
                         @foreach (var country in LiteCommerce.SelectListHelper.Countries())
@@ -75,7 +75,7 @@
                     </select>
                     @Html.ValidationMessage("ShipCountry", new { @class="help-block" })
                 </div>
-                <div class="col-sm-4">
+                <div class="form-group col-sm-4">
                     <label>City:</label>
                     <input name="ShipCity" value="" type="text" class="form-control" placeholder="City">
                     @Html.ValidationMessage("ShipCity", new { @class="help-block" })
@@ -86,8 +86,8 @@
                 <input name="ShipAddress" value="" type="text" class="form-control" placeholder="Address">
                 @Html.ValidationMessage("ShipAddress", new { @class="help-block" })
             </div>
-            <div class="form-group row">
-                <div class="col-sm-3">
+            <div class="row">
+                <div class="form-group col-sm-3">
                     <label>Products:</label>
                     <select class="form-control" name="OrderProduct">
                         @foreach (var country in LiteCommerce.SelectListHelper.Products())
@@ -97,17 +97,17 @@
                     </select>
                     @Html.ValidationMessage("OrderProduct", new { @class="help-block" })
                 </div>
-                <div class="col-sm-3">
+                <div class="form-group col-sm-3">
                     <label>Unit price: </label>
                     <input name="UnitPrice" type="number" value="" type="text" class="form-control" placeholder="Unit price">
                     @Html.ValidationMessage("UnitPrice", new { @class="help-block" })
                 </div>
-                <div class="col-sm-3">
+                <div class="form-group col-sm-3">
                     <label>Quantity:</label>
                     <input name="Quantity" value="" type="number" class="form-control" placeholder="Quantity">
                     @Html.ValidationMessage("Quantity", new { @class="help-block" })
                 </div>
-                <div class="col-sm-3">
+                <div class="form-group col-sm-3">
                     <label>Discount:</label>
                     <input name="Discount" value="" type="number" class="form-control" placeholder="Discount">
                     @Html.ValidationMessage("Discount", new { @class="help-block" })

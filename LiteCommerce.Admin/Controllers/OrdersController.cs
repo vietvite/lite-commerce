@@ -21,7 +21,15 @@ namespace LiteCommerce.Controllers
         {
             _logger = logger;
         }
-
+        /// <summary>
+        /// View page: List of order
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="country"></param>
+        /// <param name="category"></param>
+        /// <param name="employee"></param>
+        /// <param name="shipper"></param>
+        /// <returns></returns>
         public IActionResult Index(
             int page = 1,
             string country = "",
@@ -50,6 +58,11 @@ namespace LiteCommerce.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// View page: Order detail
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Review(string id = "")
         {
@@ -75,6 +88,11 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// View Page: Add new order
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult New(string id = "")
         {
@@ -93,13 +111,17 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Add view order
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult New(OrderPostRequest model)
         {
             try
             {
-                // CheckNotNull(model);
-                // SetEmptyNullableField(model);
+                CheckNotNull(model);
 
                 OrderDetails order = new OrderDetails()
                 {
@@ -134,7 +156,8 @@ namespace LiteCommerce.Controllers
                 // Save data into DB
                 if (model.OrderID == 0)
                 {
-                    CatalogBLL.AddOrder(order);
+                    int newProductID = CatalogBLL.AddOrder(order);
+                    return RedirectToAction("AddProduct", new { id = newProductID });
                 }
                 else
                 {
@@ -154,6 +177,11 @@ namespace LiteCommerce.Controllers
         }
 
         [HttpGet]
+        /// <summary>
+        /// View page: add product to order
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult AddProduct(string id = "")
         {
             try
@@ -173,6 +201,12 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Add product to order detail
+        /// </summary>
+        /// <param name="orderDetail"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult AddProduct(OrderDetailPostRequest orderDetail, string id = "")
         {
@@ -204,15 +238,9 @@ namespace LiteCommerce.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult Delete(int[] orderIDs)
-        {
-            // TODO: impl delete orders
-
-            // CatalogBLL.DeleteCategories(orderIDs);
-            return RedirectToAction("Index");
-        }
-
+        /// <summary>
+        /// Order detail post request
+        /// </summary>
         public class OrderDetailPostRequest
         {
             // Order details
@@ -222,20 +250,34 @@ namespace LiteCommerce.Controllers
             public string ProductID { get; set; }
         }
 
-        // private void CheckNotNull(Order order)
-        // {
-        //     if (string.IsNullOrEmpty(order.OrderName))
-        //         ModelState.AddModelError("OrderName", "Order name expected");
+        private void CheckNotNull(OrderPostRequest order)
+        {
+            if (order.Freight == 0)
+                ModelState.AddModelError("Freight", "Freight expected");
+            if (string.IsNullOrEmpty(order.ShipAddress))
+                ModelState.AddModelError("ShipAddress", "Ship address expected");
+            if (string.IsNullOrEmpty(order.ShipCity))
+                ModelState.AddModelError("ShipCity", "Ship city expected");
+            if (string.IsNullOrEmpty(order.ShipCountry))
+                ModelState.AddModelError("ShipCountry", "Ship country expected");
 
-        //     if (ModelState.ErrorCount > 0)
-        //         throw new MissingFieldException();
-        // }
+            if (order.ShipperID == "0")
+                ModelState.AddModelError("ShipperID", "Shipper expected");
+            if (order.CustomerID == "0")
+                ModelState.AddModelError("CustomerID", "Customer expected");
+            if (order.EmployeeID == "0")
+                ModelState.AddModelError("EmployeeID", "Employee expected");
 
-        // private void SetEmptyNullableField(Order order)
-        // {
-        //     if (string.IsNullOrEmpty(order.Description))
-        //         order.Description = "";
-        // }
+            if (order.OrderProduct == 0)
+                ModelState.AddModelError("OrderProduct", "OrderProduct expected");
+            if (order.UnitPrice == 0)
+                ModelState.AddModelError("UnitPrice", "Unit price expected");
+            if (order.Quantity == 0)
+                ModelState.AddModelError("Quantity", "Quantity expected");
+
+            if (ModelState.ErrorCount > 0)
+                throw new MissingFieldException();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

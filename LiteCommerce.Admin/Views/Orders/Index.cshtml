@@ -5,8 +5,37 @@
     ViewData["Title"] = "Orders";
     ViewData["HeaderTitle"] = "Manage Orders";
     int i = (Model.Page - 1) * Model.PageSize;
+    string OptionalQuery = MaybeCountryQuery(Model.selectedCountry)
+                                + MaybeEmployeeQuery(Model.selectedCategory) 
+                                + MaybeCategoryQuery(Model.selectedCategory)
+                                + MaybeShipperQuery(Model.selectedShipper);
 }
-
+@functions{
+    public string MaybeCountryQuery(string country)
+    {
+        return !string.IsNullOrEmpty(country)
+            ? $"&country={country}"
+            : "";
+    }
+    public string MaybeEmployeeQuery(string employee)
+    {
+        return !string.IsNullOrEmpty(employee)
+            ? string.Format("&employee={0}", employee)
+            : "";
+    }
+    public string MaybeCategoryQuery(string category)
+    {
+        return !string.IsNullOrEmpty(category)
+            ? string.Format("&category={0}", category)
+            : "";
+    }
+    public string MaybeShipperQuery(string shipper)
+    {
+        return !string.IsNullOrEmpty(shipper)
+            ? string.Format("&shipper={0}", shipper)
+            : "";
+    }
+}
 <div class="box box-primary">
     <div class="box-body">
         <form action="~/Orders" method="GET" >
@@ -73,7 +102,7 @@
                 <div class="col-sm-4">
                     <div class="input-group">
                         <span class="input-group-btn">
-                            <button type="submit" class="btn btn-block btn-primary text-primary" style="margin-top: 24px;"><i class="fa fa-search"></i></button>
+                            <button type="submit" class="btn btn-block btn-default text-primary" style="margin-top: 24px;"><i class="fa fa-search"></i></button>
                         </span>
                     </div>
                 </div>
@@ -89,7 +118,6 @@
         <div class="col-md-4 text-right">
             <div class="btn-group">
                 <a href="~/Orders/New" class="btn btn-sm btn-primary">Add Order</a>
-                <button type="submit" class="btn btn-sm btn-danger">Delete Orders</button>
             </div>
         </div>
     </div>
@@ -98,9 +126,6 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th style="width:30px">
-                            <input type="checkbox" id="checkAll" />
-                        </th>
                         <th style="width:50px">#</th>
                         <th style="width:auto">Order ID</th>
                         <th style="width:auto">Customer</th>
@@ -150,7 +175,7 @@
         </div>
         <div class="box-footer clearfix text-center">
             <ul class="pagination pagination-sm no-margin pull-right">
-                @LiteCommerce.Common.ViewHelper.RenderPageButton("Orders", Model.Page, Model.PageCount, 3, Model.SearchValue)
+                @LiteCommerce.Common.ViewHelper.RenderPageButton("Orders", Model.Page, Model.PageCount, 3, Model.SearchValue, OptionalQuery)
             </ul>
         </div>
     </div>
