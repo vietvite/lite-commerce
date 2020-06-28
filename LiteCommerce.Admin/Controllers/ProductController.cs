@@ -26,6 +26,14 @@ namespace LiteCommerce.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
+        /// <summary>
+        /// View page: List of products
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="searchValue"></param>
+        /// <param name="category"></param>
+        /// <param name="supplier"></param>
+        /// <returns></returns>
         public IActionResult Index(int page = 1, string searchValue = "", string category = "", string supplier = "")
         {
             int rowCount = 0;
@@ -47,6 +55,11 @@ namespace LiteCommerce.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// View page: Add new or update product
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Input(string id = "")
         {
@@ -86,6 +99,15 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Add new or update product
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="attribute"></param>
+        /// <param name="lstAttribute"></param>
+        /// <param name="id"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Input(ProductPostRequest model, ProductAttribute attribute, List<ProductAttribute> lstAttribute, string id = "", string query = "")
         {
@@ -155,6 +177,12 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Update product attribute
+        /// </summary>
+        /// <param name="listAttribute"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Attribute(List<ProductAttribute> listAttribute, string id = "")
         {
@@ -174,6 +202,12 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// View page: view product detail
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="attributeID"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Attribute(string id = "", string attributeID = "")
         {
@@ -193,6 +227,11 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete products
+        /// </summary>
+        /// <param name="productIDs"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Delete(int[] productIDs)
         {
@@ -200,6 +239,11 @@ namespace LiteCommerce.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// View page: View product detail
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Review(string id = "")
         {
@@ -226,6 +270,10 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Validate whether exist null product field
+        /// </summary>
+        /// <param name="product"></param>
         private void CheckNotNull(ProductPostRequest product)
         {
             if (string.IsNullOrEmpty(product.ProductName))
@@ -247,6 +295,10 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Set default nullable field
+        /// </summary>
+        /// <param name="product"></param>
         private void SetEmptyNullableField(ProductPostRequest product)
         {
             if (string.IsNullOrEmpty(product.QuantityPerUnit))
@@ -259,6 +311,11 @@ namespace LiteCommerce.Controllers
                 product.Descriptions = "";
         }
 
+        /// <summary>
+        /// Upload file handler
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         private string UploadedFile(ProductPostRequest model)
         {
             string uniqueFileName = null;

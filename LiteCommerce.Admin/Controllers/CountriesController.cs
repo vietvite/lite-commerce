@@ -24,6 +24,12 @@ namespace LiteCommerce.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// View page: List of countries
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="searchValue"></param>
+        /// <returns></returns>
         public IActionResult Index(int page = 1, string searchValue = "")
         {
             int rowCount = 0;
@@ -42,6 +48,11 @@ namespace LiteCommerce.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// View page: Add new or update country
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Input(string id = "")
         {
@@ -70,6 +81,12 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Add new or update country
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Input(Country model, string id = "")
         {
@@ -102,6 +119,11 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete countries
+        /// </summary>
+        /// <param name="countryIDs"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Delete(string[] countryIDs)
         {

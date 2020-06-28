@@ -22,6 +22,13 @@ namespace LiteCommerce.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// View page: List of customers
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="searchValue"></param>
+        /// <param name="country"></param>
+        /// <returns></returns>
         public IActionResult Index(int page = 1, string searchValue = "", string country = "")
         {
             int rowCount = 0;
@@ -41,6 +48,11 @@ namespace LiteCommerce.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// View page: Add new or update customer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Input(String id = "")
         {
@@ -73,6 +85,11 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Add new or update customer
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Input(Customer model)
         {
@@ -104,6 +121,11 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete customers
+        /// </summary>
+        /// <param name="customerIDs"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Delete(string[] customerIDs)
         {
@@ -111,6 +133,10 @@ namespace LiteCommerce.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Validate whether input of customer post request is null
+        /// </summary>
+        /// <param name="supplier"></param>
         private void CheckNotNull(Customer supplier)
         {
             if (string.IsNullOrEmpty(supplier.CompanyName))
@@ -122,6 +148,10 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Set default nullable supplier field
+        /// </summary>
+        /// <param name="supplier"></param>
         private void SetEmptyNullableField(Customer supplier)
         {
             if (string.IsNullOrEmpty(supplier.ContactName))

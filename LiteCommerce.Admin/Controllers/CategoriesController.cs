@@ -22,6 +22,12 @@ namespace LiteCommerce.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// View page: List of categories
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="searchValue"></param>
+        /// <returns></returns>
         public IActionResult Index(int page = 1, string searchValue = "")
         {
             int rowCount = 0;
@@ -40,6 +46,11 @@ namespace LiteCommerce.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// View page: Add new or update category
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Input(string id = "")
         {
@@ -70,6 +81,11 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Add new or update category
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Input(Category model)
         {
@@ -100,6 +116,11 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete categories
+        /// </summary>
+        /// <param name="categoryIDs"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Delete(int[] categoryIDs)
         {
@@ -107,6 +128,10 @@ namespace LiteCommerce.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Validate whether post input category is null
+        /// </summary>
+        /// <param name="category"></param>
         private void CheckNotNull(Category category)
         {
             if (string.IsNullOrEmpty(category.CategoryName))
@@ -116,6 +141,10 @@ namespace LiteCommerce.Controllers
                 throw new MissingFieldException();
         }
 
+        /// <summary>
+        /// Set default if exist nullable field
+        /// </summary>
+        /// <param name="category"></param>
         private void SetEmptyNullableField(Category category)
         {
             if (string.IsNullOrEmpty(category.Description))

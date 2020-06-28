@@ -22,6 +22,12 @@ namespace LiteCommerce.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// View page: List of suppliers
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="searchValue"></param>
+        /// <returns></returns>
         public IActionResult Index(int page = 1, string searchValue = "")
         {
             int rowCount = 0;
@@ -40,6 +46,11 @@ namespace LiteCommerce.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// View page: Add new or update supplier
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Input(string id = "")
         {
@@ -72,6 +83,11 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Add new or update supplier
+        /// </summary>
+        /// <param name="supplier"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Input(Supplier supplier)
         {
@@ -102,6 +118,11 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete suppliers
+        /// </summary>
+        /// <param name="supplierIDs"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Delete(int[] supplierIDs)
         {
@@ -125,6 +146,10 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Set default nullable field
+        /// </summary>
+        /// <param name="supplier"></param>
         private void SetEmptyNullableField(Supplier supplier)
         {
             if (string.IsNullOrEmpty(supplier.ContactTitle))

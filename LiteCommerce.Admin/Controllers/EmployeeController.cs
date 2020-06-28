@@ -32,6 +32,13 @@ namespace LiteCommerce.Controllers
             _passwordHasher = passwordHasher;
         }
 
+        /// <summary>
+        /// View page: List of employees
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="searchValue"></param>
+        /// <param name="country"></param>
+        /// <returns></returns>
         public IActionResult Index(int page = 1, string searchValue = "", string country = "")
         {
             int rowCount = 0;
@@ -51,6 +58,11 @@ namespace LiteCommerce.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// View page: Add new or update employee
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Input(string id = "")
         {
@@ -83,6 +95,12 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Add new or update employee
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Input(EmployeePostRequest model, string id = "")
         {
@@ -170,6 +188,11 @@ namespace LiteCommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete employees
+        /// </summary>
+        /// <param name="employeeIDs"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Delete(int[] employeeIDs)
         {
@@ -177,6 +200,11 @@ namespace LiteCommerce.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Upload image handler
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         private string UploadedFile(EmployeePostRequest model)
         {
             string uniqueFileName = null;
