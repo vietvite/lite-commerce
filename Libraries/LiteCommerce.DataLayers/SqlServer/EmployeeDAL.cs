@@ -306,5 +306,45 @@ namespace LiteCommerce.DataLayers.SqlServer
 
             return rowsAffected > 0;
         }
+
+        public bool UpdateProfile(Employee employee)
+        {
+            int rowsAffected = 0;
+
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = @"UPDATE Employees
+                                    SET LastName = @LastName
+                                    ,   FirstName = @FirstName
+                                    ,   BirthDate = @BirthDate
+                                    ,   Email = @Email
+                                    ,   Address = @Address
+                                    ,   City = @City
+                                    ,   Country = @Country
+                                    ,   HomePhone = @HomePhone
+                                    ,   PhotoPath = @PhotoPath
+                                    WHERE EmployeeID = @EmployeeID";
+                cmd.CommandType = CommandType.Text;
+                cmd.Connection = connection;
+                cmd.Parameters.AddWithValue("@EmployeeID", employee.EmployeeID);
+                cmd.Parameters.AddWithValue("@LastName", employee.LastName);
+                cmd.Parameters.AddWithValue("@FirstName", employee.FirstName);
+                cmd.Parameters.AddWithValue("@BirthDate", employee.BirthDate);
+                cmd.Parameters.AddWithValue("@Email", employee.Email);
+                cmd.Parameters.AddWithValue("@Address", employee.Address);
+                cmd.Parameters.AddWithValue("@City", employee.City);
+                cmd.Parameters.AddWithValue("@Country", employee.Country);
+                cmd.Parameters.AddWithValue("@HomePhone", employee.HomePhone);
+                cmd.Parameters.AddWithValue("@PhotoPath", employee.PhotoPath);
+
+                rowsAffected = Convert.ToInt32(cmd.ExecuteNonQuery());
+
+                connection.Close();
+            }
+
+            return rowsAffected > 0;
+        }
     }
 }

@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authentication;
 using LiteCommerce.DomainModels;
 using LiteCommerce.BusinessLayers;
 using LiteCommerce.Services;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace LiteCommerce.Controllers
 {
@@ -22,17 +24,74 @@ namespace LiteCommerce.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public AccountController(ILogger<AccountController> logger, IHttpContextAccessor contextAccessor, IPasswordHasher passwordHasher)
+        public AccountController(
+            ILogger<AccountController> logger,
+            IHttpContextAccessor contextAccessor,
+            IPasswordHasher passwordHasher,
+            IWebHostEnvironment hostingEnvironment)
         {
             _logger = logger;
             _contextAccessor = contextAccessor;
             _passwordHasher = passwordHasher;
+            _hostingEnvironment = hostingEnvironment;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            Employee employee = CatalogBLL.GetEmployee(Convert.ToInt32(User.FindFirst("UserID").Value));
+            return View(employee);
+        }
+
+        [HttpPost]
+        public IActionResult Index(EmployeePostRequest model, string id = "")
+        {
+            try
+            {
+                CheckNotNull(model);
+
+                string photoPath = UploadedFile(model);
+                photoPath = string.IsNullOrEmpty(photoPath)
+                    ? CatalogBLL.GetEmployee(model.EmployeeID).PhotoPath
+                    : photoPath;
+
+                Employee employee = new Employee
+                {
+                    EmployeeID = model.EmployeeID,
+                    LastName = model.LastName,
+                    FirstName = model.FirstName,
+                    BirthDate = model.BirthDate,
+                    Email = model.Email,
+                    Address = model.Address,
+                    City = model.City,
+                    Country = model.Country,
+                    HomePhone = model.HomePhone,
+                    PhotoPath = photoPath,
+                };
+
+                CatalogBLL.UpdateEmployeeProfile(employee);
+                return RedirectToAction("Index");
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.Message + ": " + ex.StackTrace);
+                Employee employee = new Employee
+                {
+                    EmployeeID = model.EmployeeID,
+                    LastName = model.LastName,
+                    FirstName = model.FirstName,
+                    BirthDate = model.BirthDate,
+                    Email = model.Email,
+                    Address = model.Address,
+                    City = model.City,
+                    Country = model.Country,
+                    HomePhone = model.HomePhone,
+                };
+                return View(employee);
+            }
+            // return View(employee);
         }
 
         [HttpGet]
@@ -156,7 +215,7 @@ namespace LiteCommerce.Controllers
             return RedirectToAction("LogIn");
         }
 
-        private void CheckNotNull(string email = "", string password = "")
+        private void CheckNotNull(string email, string password)
         {
             if (string.IsNullOrEmpty(email))
                 ModelState.AddModelError("LoginError", "Email expected");
@@ -165,9 +224,54 @@ namespace LiteCommerce.Controllers
                 ModelState.AddModelError("LoginError", "Password expected");
 
             if (ModelState.ErrorCount > 0)
-            {
                 throw new MissingFieldException();
+        }
+
+        private void CheckNotNull(EmployeePostRequest model)
+        {
+            if (string.IsNullOrEmpty(model.LastName))
+                ModelState.AddModelError("LastName", "Last name expected");
+
+            if (string.IsNullOrEmpty(model.FirstName))
+                ModelState.AddModelError("FirstName", "First name expected");
+
+            if (model.BirthDate.Year < 1753 || model.BirthDate.Year > 9999)
+                ModelState.AddModelError("BirthDate", "BirthDate's year must be between 1753 and 9999");
+
+            if (string.IsNullOrEmpty(model.Email))
+                ModelState.AddModelError("Email", "Email expected");
+
+            if (string.IsNullOrEmpty(model.Address))
+                model.Address = "";
+
+            if (string.IsNullOrEmpty(model.City))
+                model.City = "";
+
+            if (string.IsNullOrEmpty(model.Country))
+                model.Country = "";
+
+            if (string.IsNullOrEmpty(model.HomePhone))
+                model.HomePhone = "";
+
+            if (ModelState.ErrorCount > 0)
+                throw new MissingFieldException();
+        }
+
+        private string UploadedFile(EmployeePostRequest model)
+        {
+            string uniqueFileName = null;
+
+            if (model.PhotoPath != null)
+            {
+                string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.PhotoPath.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.PhotoPath.CopyTo(fileStream);
+                }
             }
+            return uniqueFileName;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

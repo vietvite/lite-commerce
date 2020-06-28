@@ -18,5 +18,7 @@ namespace LiteCommerce.DataLayers
         int Delete(int[] employeeIDs);
 
         bool ChangePassword(Employee employee);
+
+        bool UpdateProfile(Employee employee);
     }
 }

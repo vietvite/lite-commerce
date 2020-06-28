@@ -150,6 +150,10 @@ namespace LiteCommerce.BusinessLayers
         {
             return EmployeeDB.ChangePassword(employee);
         }
+        public static bool UpdateEmployeeProfile(Employee employee)
+        {
+            return EmployeeDB.UpdateProfile(employee);
+        }
         #endregion
 
         #region Category
